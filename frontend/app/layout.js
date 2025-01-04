@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} antialiased`}
       >
         <body className="flex flex-col h-screen">
-          <ThemeProvider>
+          <ThemeProvider attribute="class">
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
