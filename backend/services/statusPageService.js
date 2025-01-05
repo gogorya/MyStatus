@@ -37,8 +37,8 @@ const createStatusPage = async (data) => {
 const updateStatusPage = async (data) => {
   const statusPageToUpdate = await StatusPage.findById(data._id);
   if (
-    statusPageToUpdate.orgId !== data.orgId &&
-    statusPageToUpdate._id !== data._id
+    statusPageToUpdate.orgId.toString() !== data.orgId.toString() ||
+    statusPageToUpdate._id.toString() !== data._id.toString()
   ) {
     throw new Error("Unauthorized");
   }
@@ -56,8 +56,8 @@ const updateStatusPage = async (data) => {
 const deleteStatusPage = async (data) => {
   const statusPageToDelete = await StatusPage.findById(data._id);
   if (
-    statusPageToDelete.orgId !== data.orgId &&
-    statusPageToDelete._id !== data._id
+    statusPageToDelete.orgId.toString() !== data.orgId.toString() ||
+    statusPageToDelete._id.toString() !== data._id.toString()
   ) {
     throw new Error("Unauthorized");
   }

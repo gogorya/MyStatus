@@ -50,7 +50,7 @@ export default function Page() {
   useEffect(() => {
     const fetchStatusPages = async () => {
       const res = await getDataAction(getStatusPages);
-      if (res.data) setStatusPages(res.data.statusPages);
+      if (res && res.data) setStatusPages(res.data.statusPages);
     };
     fetchStatusPages();
   }, []);

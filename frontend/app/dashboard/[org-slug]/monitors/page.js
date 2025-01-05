@@ -46,7 +46,7 @@ export default function Page() {
   useEffect(() => {
     const fetchMonitors = async () => {
       const res = await getDataAction(getMonitors);
-      if (res.data) setMonitors(res.data.monitors);
+      if (res && res.data) setMonitors(res.data.monitors);
     };
     fetchMonitors();
   }, []);
