@@ -6,6 +6,13 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
+export const generateSlug = (name) => {
+  return name
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+};
+
 export const axiosGet = async (url, token) => {
   try {
     const res = await axios.get(url, {

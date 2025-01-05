@@ -1,5 +1,6 @@
 const Organization = require("../models/Organization.js");
 
+// Organization
 const organizationExists = async (orgId) => {
   const organization = await Organization.findOne({ orgId });
   return organization !== null;
@@ -11,6 +12,7 @@ const createOrganization = async (orgId) => {
   return newOrganization;
 };
 
+// Monitor
 const getMonitors = async (orgId) => {
   const organization = await Organization.findOne({ orgId });
   return organization.monitors;
@@ -35,10 +37,38 @@ const deleteMonitor = async (orgId, monitorId) => {
   await organization.save();
 };
 
+// StatusPage
+const getStatusPages = async (orgId) => {
+  const organization = await Organization.findOne({ orgId });
+  return organization.statusPages;
+};
+
+const addStatusPage = async (orgId, statusPageId) => {
+  const organization = await Organization.findOne({ orgId });
+  const statusPageExists = organization.statusPages.some(
+    (statusPage) => statusPage.toString() === statusPageId.toString()
+  );
+  if (!statusPageExists) {
+    organization.statusPages.push(statusPageId);
+    await organization.save();
+  }
+};
+
+const deleteStatusPage = async (orgId, statusPageId) => {
+  const organization = await Organization.findOne({ orgId });
+  organization.statusPages = organization.statusPages.filter(
+    (statusPage) => statusPage.toString() !== statusPageId.toString()
+  );
+  await organization.save();
+};
+
 module.exports = {
   organizationExists,
   createOrganization,
   getMonitors,
   addMonitor,
   deleteMonitor,
+  getStatusPages,
+  addStatusPage,
+  deleteStatusPage,
 };

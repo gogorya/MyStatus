@@ -4,6 +4,7 @@ const monitorSchema = new mongoose.Schema({
   orgId: {
     type: String,
     required: true,
+    immutable: true,
   },
   name: {
     type: String,

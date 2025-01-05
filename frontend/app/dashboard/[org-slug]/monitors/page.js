@@ -2,7 +2,7 @@
 
 // components
 import Dashboard from "@/components/Dashboard";
-import Table from "@/components/Table";
+import MonitorTable from "@/components/MonitorTable";
 
 // ui components
 import {
@@ -24,8 +24,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
 // lib
-import { getMonitorsAction } from "../../../actions";
+import { getDataAction } from "../../../actions";
 import {
+  getMonitors,
   createMonitor,
   updateMonitor,
   deleteMonitor,
@@ -43,11 +44,11 @@ export default function Page() {
   const [monitors, setMonitors] = useState([]);
 
   useEffect(() => {
-    const getMonitors = async () => {
-      const res = await getMonitorsAction();
+    const fetchMonitors = async () => {
+      const res = await getDataAction(getMonitors);
       if (res.data) setMonitors(res.data.monitors);
     };
-    getMonitors();
+    fetchMonitors();
   }, []);
 
   // handle state changes
@@ -184,7 +185,7 @@ export default function Page() {
   return (
     <div>
       <Dashboard props={dashboardProps}>
-        <Table props={tableProps} />
+        <MonitorTable props={tableProps} />
       </Dashboard>
     </div>
   );
