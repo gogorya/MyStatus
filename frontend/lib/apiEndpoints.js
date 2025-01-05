@@ -1,5 +1,9 @@
 const host = "http://localhost:8080";
 
+// public
+const getStatusPageData = `${host}/public/get-status-page-data`;
+
+// private
 // monitors
 const monitors = `${host}/api/monitors`;
 // get
@@ -19,6 +23,7 @@ const updateStatusPage = `${statusPages}/update`;
 const deleteStatusPage = `${statusPages}/delete`;
 
 module.exports = {
+  getStatusPageData,
   getMonitors,
   createMonitor,
   updateMonitor,

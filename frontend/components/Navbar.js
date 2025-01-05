@@ -11,49 +11,50 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Label } from "@/components/ui/label";
 
 export default function Navbar() {
   const { orgSlug } = useAuth();
 
   return (
-    <div>
-      <div>Navbar</div>
-      <div>
-        <SignedIn>
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <Link
-                  href={`/dashboard/${orgSlug}/monitors`}
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Monitors
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link
-                  href={`/dashboard/${orgSlug}/status-pages`}
-                  legacyBehavior
-                  passHref
-                >
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Status Pages
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <OrganizationSwitcher />
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <UserButton />
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
-        </SignedIn>
-      </div>
+    <div className="">
+      <NavigationMenu className="p-2">
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <Label className="text-sky-600">MyStatus</Label>
+          </NavigationMenuItem>
+          <SignedIn>
+            <NavigationMenuItem>
+              <Link
+                href={`/dashboard/${orgSlug}/monitors`}
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Monitors
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link
+                href={`/dashboard/${orgSlug}/status-pages`}
+                legacyBehavior
+                passHref
+              >
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Status Pages
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <OrganizationSwitcher />
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <UserButton />
+            </NavigationMenuItem>
+          </SignedIn>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
   );
 }

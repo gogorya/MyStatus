@@ -16,9 +16,9 @@ export default function RootLayout({ children }) {
       <html
         lang="en"
         suppressHydrationWarning
-        className={`${inter.variable} antialiased`}
+        className={`${inter.variable} antialiased bg-gray-200`}
       >
-        <body className="flex flex-col h-screen">
+        <body className="flex flex-col h-screen max-w-4xl mx-auto">
           <ThemeProvider attribute="class">
             <Navbar />
             <main className="flex-1">{children}</main>

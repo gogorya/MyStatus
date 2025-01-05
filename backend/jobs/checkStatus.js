@@ -20,7 +20,7 @@ agenda.define("check status", async () => {
 
       let monitorData = await ActiveMonitorData.findOne({ id: monitor._id });
       if (!monitorData) {
-        monitorData = new ActiveMonitorData({ id: monitor._id, data: [] });
+        monitorData = new ActiveMonitorData({ id: monitor.id, data: [] });
       }
 
       const lastRecord = monitorData.data[monitorData.data.length - 1];
@@ -51,7 +51,7 @@ agenda.define("check status", async () => {
 });
 
 agenda.on("ready", () => {
-  agenda.every("5 minutes", "check status");
+  agenda.every("1 minutes", "check status");
 });
 agenda.on("error", (error) => {
   console.error("Agenda error:", error);

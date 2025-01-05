@@ -12,7 +12,7 @@ import { Dialog, DialogTrigger } from "./ui/dialog";
 export default function Dashboard({ props, children }) {
   return (
     <div>
-      <Card>
+      <Card className="h-screen">
         <CardHeader className="flex flex-row justify-between items-center">
           <div>
             <CardTitle>{props.title}</CardTitle>
