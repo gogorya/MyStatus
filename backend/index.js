@@ -4,12 +4,15 @@ const { requireAuth } = require("@clerk/express");
 const monitorRoutes = require("./routes/monitorRoutes");
 const statusPageRoutes = require("./routes/statusPageRoutes");
 const connectDB = require("./config/database");
+const { startCheckStatus } = require("./jobs/checkStatus");
 
 const app = express();
 require("dotenv").config();
 
 app.use(express.json());
 app.use(cors()); // fix for production
+
+startCheckStatus();
 
 app.use("/api/monitors", requireAuth(), monitorRoutes);
 app.use("/api/status-pages", requireAuth(), statusPageRoutes);
