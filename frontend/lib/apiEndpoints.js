@@ -1,4 +1,4 @@
-const host = "http://localhost:8080";
+const host = process.env.API_HOST || "http://localhost:8080";
 
 // public
 const getStatusPageData = `${host}/public/get-status-page-data`;

@@ -11,7 +11,7 @@ const app = express();
 require("dotenv").config();
 
 app.use(express.json());
-app.use(cors()); // fix for production
+app.use(cors()); // fix for production // add helmet?
 
 startCheckStatus();
 
