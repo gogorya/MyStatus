@@ -11,3 +11,9 @@
     --radius: 0.5rem;
   }
 }
+
+@layer components {
+  .header {
+    @apply h-14 p-2 flex justify-center items-center;
+  }
+}

@@ -18,7 +18,7 @@ agenda.define("check status", async () => {
       const response = await axios.get(monitor.link);
       const success = response.status === 200;
 
-      let monitorData = await ActiveMonitorData.findOne({ id: monitor._id });
+      let monitorData = await ActiveMonitorData.findOne({ id: monitor.id });
       if (!monitorData) {
         monitorData = new ActiveMonitorData({ id: monitor.id, data: [] });
       }
@@ -51,7 +51,7 @@ agenda.define("check status", async () => {
 });
 
 agenda.on("ready", () => {
-  agenda.every("1 minutes", "check status");
+  agenda.every("5 minutes", "check status");
 });
 agenda.on("error", (error) => {
   console.error("Agenda error:", error);

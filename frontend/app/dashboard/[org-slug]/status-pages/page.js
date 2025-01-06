@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
 
 // hooks
 import Form from "next/form";
@@ -169,43 +170,58 @@ export default function Page() {
           <DialogDescription>Slug needs to be unique</DialogDescription>
         </DialogHeader>
         <div>
-          <Form>
-            <Label>Name</Label>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="airplane-mode">Active</Label>
-              <Switch
-                checked={statusPage.active}
-                onCheckedChange={handleActiveStatus}
+          <Form className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <Label>Name</Label>
+                <div className="flex items-center space-x-2">
+                  <Label htmlFor="airplane-mode">Active</Label>
+                  <Switch
+                    checked={statusPage.active}
+                    onCheckedChange={handleActiveStatus}
+                  />
+                </div>
+              </div>
+              <Input
+                type="text"
+                placeholder="My Status Page"
+                onChange={handleNameChange}
+                value={statusPage.name}
+                disabled={statusPage._id != null}
               />
             </div>
-            <Input
-              type="text"
-              placeholder="My Status Page"
-              onChange={handleNameChange}
-              value={statusPage.name}
-              disabled={statusPage._id != null}
-            />
-            <Label>Slug</Label>
-            <Input
-              type="text"
-              placeholder="my-status-page"
-              value={statusPage.slug}
-              disabled={true}
-            />
-            {statusPage.monitors.map((monitor, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <Checkbox
-                  checked={monitor.selected}
-                  onCheckedChange={() => {
-                    const updatedMonitors = [...statusPage.monitors];
-                    updatedMonitors[index].selected =
-                      !updatedMonitors[index].selected;
-                    setStatusPage({ ...statusPage, monitors: updatedMonitors });
-                  }}
-                />
-                <Label>{monitor.name}</Label>
+            <div className="space-y-2">
+              <Label>Slug</Label>
+              <Input
+                type="text"
+                placeholder="my-status-page"
+                value={statusPage.slug}
+                disabled={true}
+              />
+            </div>
+            <Separator />
+            <div className="space-y-2">
+              <Label>Monitors</Label>
+              <div className="space-y-1">
+                {statusPage.monitors.map((monitor, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={monitor.selected}
+                      onCheckedChange={() => {
+                        const updatedMonitors = [...statusPage.monitors];
+                        updatedMonitors[index].selected =
+                          !updatedMonitors[index].selected;
+                        setStatusPage({
+                          ...statusPage,
+                          monitors: updatedMonitors,
+                        });
+                      }}
+                    />
+                    <Label>{monitor.name}</Label>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </Form>
         </div>
         <DialogFooter>
@@ -229,7 +245,7 @@ export default function Page() {
   const tableProps = {
     columns: [
       { name: "Name", class: "w-40" },
-      { name: "Slug", class: "w-48" },
+      { name: "Slug", class: "w-40" },
       { name: "Monitors", class: "" },
       { name: "Active", class: "text-right" },
     ],

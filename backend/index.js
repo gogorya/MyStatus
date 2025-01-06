@@ -13,7 +13,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cors()); // fix for production
 
-// startCheckStatus();
+startCheckStatus();
 
 // public
 app.use("/public", statusPagePublicRoutes);

@@ -1,5 +1,12 @@
 import { SignIn } from "@clerk/nextjs";
+import Dashboard from "@/components/Dashboard";
 
 export default function Page() {
-  return <SignIn />;
+  return (
+    <Dashboard
+      props={{ title: "Sign in", description: "Please sign in to continue" }}
+    >
+      <SignIn />
+    </Dashboard>
+  );
 }

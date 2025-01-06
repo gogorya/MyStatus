@@ -16,13 +16,23 @@ export default function RootLayout({ children }) {
       <html
         lang="en"
         suppressHydrationWarning
-        className={`${inter.variable} antialiased bg-gray-200`}
+        className={`${inter.variable} antialiased min-h-screen h-full`}
       >
-        <body className="flex flex-col h-screen max-w-4xl mx-auto">
+        <head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          ></meta>
+        </head>
+        <body className="min-h-full h-full w-full snap-y bg-gray-100 dark:bg-black">
           <ThemeProvider attribute="class">
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
+            <div className="">
+              <div className="flex flex-col max-w-4xl mx-auto">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+            </div>
           </ThemeProvider>
         </body>
       </html>

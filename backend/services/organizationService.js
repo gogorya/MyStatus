@@ -15,6 +15,9 @@ const createOrganization = async (orgId) => {
 // Monitor
 const getMonitors = async (orgId) => {
   const organization = await Organization.findOne({ orgId });
+  if (!organization) {
+    return [];
+  }
   return organization.monitors;
 };
 
@@ -40,6 +43,9 @@ const deleteMonitor = async (orgId, monitorId) => {
 // StatusPage
 const getStatusPages = async (orgId) => {
   const organization = await Organization.findOne({ orgId });
+  if (!organization) {
+    return [];
+  }
   return organization.statusPages;
 };
 

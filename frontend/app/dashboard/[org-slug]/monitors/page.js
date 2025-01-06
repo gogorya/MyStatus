@@ -128,28 +128,34 @@ export default function Page() {
           <DialogDescription>Please ensure link is proper</DialogDescription>
         </DialogHeader>
         <div>
-          <Form>
-            <Label>Name</Label>
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="airplane-mode">Active</Label>
-              <Switch
-                checked={monitor.active}
-                onCheckedChange={handleActiveStatus}
+          <Form className="space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <Label>Name</Label>
+                <div className="flex items-center space-x-2">
+                  <Label htmlFor="airplane-mode">Active</Label>
+                  <Switch
+                    checked={monitor.active}
+                    onCheckedChange={handleActiveStatus}
+                  />
+                </div>
+              </div>
+              <Input
+                type="text"
+                placeholder="My website"
+                onChange={handleNameChange}
+                value={monitor.name}
               />
             </div>
-            <Input
-              type="text"
-              placeholder="My website"
-              onChange={handleNameChange}
-              value={monitor.name}
-            />
-            <Label>Link</Label>
-            <Input
-              type="text"
-              placeholder="https://mywebsite.com"
-              onChange={handleLinkChange}
-              value={monitor.link}
-            />
+            <div className="space-y-2">
+              <Label>Link</Label>
+              <Input
+                type="text"
+                placeholder="https://mywebsite.com"
+                onChange={handleLinkChange}
+                value={monitor.link}
+              />
+            </div>
           </Form>
         </div>
         <DialogFooter>

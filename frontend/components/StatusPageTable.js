@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Page({ props }) {
   return (
-    <div className="rounded-lg border">
+    <div className="border rounded-lg w-full">
       <Table>
         <TableHeader>
           <TableRow>
