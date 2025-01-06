@@ -8,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 const inter = Inter({
   variable: "--font-inter",
   fallback: ["system-ui"],
+  subsets: ["latin"],
 });
 
 export default function RootLayout({ children }) {
