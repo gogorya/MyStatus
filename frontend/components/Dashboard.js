@@ -15,7 +15,7 @@ import { SignedIn } from "@clerk/nextjs";
 export default function Dashboard({ props, children }) {
   return (
     <div>
-      <Card className="min-h-[750] mt-10 mb-5 flex flex-col">
+      <Card className="min-h-[750px] mt-10 mb-5 flex flex-col">
         <CardHeader className="flex flex-row justify-between items-center">
           <div>
             <CardTitle className="text-lg">{props.title}</CardTitle>

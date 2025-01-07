@@ -18,7 +18,6 @@ export const getDataAction = async (url) => {
 export const getDataPublicAction = async (url, slug) => {
   try {
     const data = { slug };
-    console.log("url", url, data);
     const res = await axios.post(url, { data });
     return res.data;
   } catch (error) {

@@ -1,4 +1,4 @@
-const host = process.env.API_HOST;
+const host = process.env.NEXT_PUBLIC_API_HOST;
 
 // public
 const getStatusPageData = `${host}/public/get-status-page-data`;
