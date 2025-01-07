@@ -21,6 +21,10 @@ const createStatusPage = async (data) => {
   if (!organizationExists) {
     await organizationService.createOrganization(data.orgId);
   }
+  const slugExists = await StatusPage.find({ slug: data.slug });
+  if (slugExists.length !== 0) {
+    throw new Error("Slug already exists");
+  }
 
   const newStatusPage = new StatusPage(data);
   await newStatusPage.save();

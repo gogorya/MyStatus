@@ -31,7 +31,7 @@ import {
   updateMonitor,
   deleteMonitor,
 } from "@/lib/apiEndpoints";
-import { axiosPost } from "@/lib/utils";
+import { axiosPost, checkLink } from "@/lib/utils";
 
 export default function Page() {
   // states
@@ -42,6 +42,7 @@ export default function Page() {
     _id: null,
   });
   const [monitors, setMonitors] = useState([]);
+  const [isLinkValid, setIsLinkValid] = useState(false);
 
   useEffect(() => {
     const fetchMonitors = async () => {
@@ -60,6 +61,8 @@ export default function Page() {
   };
   const handleLinkChange = (e) => {
     setMonitor({ ...monitor, link: e.target.value });
+    if (checkLink(e.target.value)) setIsLinkValid(true);
+    else setIsLinkValid(false);
   };
   const handleCreate = () => {
     setMonitor({ name: "", link: "", active: true, _id: null });
@@ -160,7 +163,13 @@ export default function Page() {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={handleSave}>
+            <Button
+              type="submit"
+              onClick={handleSave}
+              disabled={
+                monitor.name === "" || monitor.link === "" || !isLinkValid
+              }
+            >
               Save
             </Button>
           </DialogClose>

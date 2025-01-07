@@ -24,11 +24,17 @@ const createStatusPage = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Unable to create status page",
-      error: error.message,
-    });
+    if (error.message === "Slug already exists") {
+      res.status(409).json({
+        message: "Slug already exists, please try a different name",
+        error: error.message,
+      });
+    } else {
+      res.status(500).json({
+        message: "Unable to create status page",
+        error: error.message,
+      });
+    }
   }
 };
 

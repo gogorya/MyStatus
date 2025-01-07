@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 // hooks
 import Form from "next/form";
@@ -156,7 +157,13 @@ export default function Page() {
       }
       setStatusPages((prevItems) => [...prevItems, res.data.statusPage]);
     } catch (error) {
-      console.error(error);
+      if (error.response && error.response.status === 409) {
+        toast("Slug for the page already exists", {
+          description: "Please create with a new one",
+        });
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -226,7 +233,11 @@ export default function Page() {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={handleSave}>
+            <Button
+              type="submit"
+              onClick={handleSave}
+              disabled={statusPage.name === ""}
+            >
               Save
             </Button>
           </DialogClose>

@@ -13,6 +13,14 @@ export const generateSlug = (name) => {
     .replace(/[^\w-]+/g, "");
 };
 
+export const checkLink = (link) => {
+  const urlPattern = new RegExp(
+    /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z]{2,}(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+    "i"
+  );
+  return !!urlPattern.test(link);
+};
+
 export const axiosGet = async (url, token) => {
   try {
     const res = await axios.get(url, {
@@ -39,6 +47,10 @@ export const axiosPost = async (url, token, data) => {
     );
     return res.data;
   } catch (error) {
-    console.error(error);
+    if (error.response && error.response.status === 409) {
+      throw error;
+    } else {
+      console.error(error);
+    }
   }
 };

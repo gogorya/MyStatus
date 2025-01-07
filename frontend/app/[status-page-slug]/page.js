@@ -14,7 +14,7 @@ import Dashboard from "@/components/Dashboard";
 
 // hooks
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 
 // lib
 import { getDataPublicAction } from "../actions";
@@ -23,16 +23,23 @@ import { getStatusPageData } from "@/lib/apiEndpoints";
 export default function Page() {
   const params = useParams();
   const [monitorsData, setMonitorsData] = useState([]);
+  const [pageExists, setPageExists] = useState(true);
 
   useEffect(() => {
     const fetchStatusPage = async () => {
       const slug = params["status-page-slug"];
-      const res = await getDataPublicAction(getStatusPageData, slug);
-
-      setMonitorsData(res.data.statusPagePublic);
+      try {
+        const res = await getDataPublicAction(getStatusPageData, slug);
+        if (res.data.ok) setMonitorsData(res.data.statusPagePublic);
+        else setPageExists(false);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchStatusPage();
   }, []);
+
+  if (!pageExists) notFound();
 
   return (
     <Dashboard
