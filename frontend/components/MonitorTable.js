@@ -95,6 +95,6 @@ export default function Page({ props }) {
           })}
         </TableBody>
       </Table>
-     </div>
+    </div>
   );
 }

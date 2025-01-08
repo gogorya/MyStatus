@@ -55,7 +55,7 @@ MyStatus is a web application for monitoring the status of various web services.
   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
   NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
   NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
-  NEXT_PUBLIC_API_HOST
+  NEXT_PUBLIC_API_HOST=your-api-host
   ```
 
 - Backend
@@ -124,6 +124,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Known Issues
 
 - Dropdown menu for Editing remains open
+- Hover card does not work on mobile
 
 ```
 

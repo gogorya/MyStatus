@@ -4,7 +4,7 @@ const ActiveMonitorData = require("../models/ActiveMonitorData.js");
 
 const getStatusPagePublic = async (slug) => {
   const statusPage = await StatusPage.findOne({ slug });
-  if (!statusPage) {
+  if (!statusPage || !statusPage.active) {
     throw new Error("Status page not found");
   }
   const monitorIds = statusPage.monitors;

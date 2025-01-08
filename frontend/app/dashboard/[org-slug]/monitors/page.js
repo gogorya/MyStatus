@@ -70,6 +70,8 @@ export default function Page() {
   const handleEdit = (_id) => {
     const monitorToEdit = monitors.find((monitor) => monitor._id === _id);
     if (monitorToEdit) {
+      if (checkLink(monitorToEdit.link)) setIsLinkValid(true);
+      else setIsLinkValid(false);
       setMonitor({
         name: monitorToEdit.name,
         link: monitorToEdit.link,

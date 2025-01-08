@@ -18,6 +18,8 @@ import {
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
+import Link from "next/link";
+
 export default function Page({ props }) {
   return (
     <div className="border rounded-lg w-full">
@@ -37,28 +39,35 @@ export default function Page({ props }) {
           {props.rows.map((row, rindex) => {
             return (
               <TableRow key={rindex}>
-                {Object.entries(row).map(([key, value], cindex) => {
-                  if (key === "_id") return null;
-                  return (
-                    <TableCell
-                      key={cindex}
+                <TableCell>{row.name}</TableCell>
+                <TableCell>
+                  <Link
+                    href={`/${row.slug}`}
+                    target="_blank"
+                    className={
+                      row.active
+                        ? "hover:underline relative"
+                        : "pointer-events-none"
+                    }
+                  >
+                    {row.slug}
+                    <span
                       className={
-                        Object.values(row).length - 1 === cindex
-                          ? "text-right"
-                          : ""
+                        row.active
+                          ? "text-gray-600 dark:text-gray-400 text-base absolute top-[-2px]"
+                          : "hidden"
                       }
                     >
-                      {key === "monitors"
-                        ? value.map((monitor) => monitor.name).join(", ")
-                        : key !== "active"
-                        ? value
-                        : value
-                        ? "Yes"
-                        : "No"}
-                    </TableCell>
-                  );
-                })}
-
+                      &nbsp;&#8599;
+                    </span>
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  {row.monitors.map((monitor) => monitor.name).join(", ")}
+                </TableCell>
+                <TableCell className="text-right">
+                  {row.active ? "Yes" : "No"}
+                </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu model={false}>
                     <DropdownMenuTrigger asChild>

@@ -45,7 +45,7 @@ export default function Page() {
     <Dashboard
       props={{
         title: "Services",
-        description: "Overview of all active services",
+        description: "Overview of all services",
         buttonClass: "hidden",
       }}
     >
@@ -55,47 +55,49 @@ export default function Page() {
             key={monitorData.id}
             className="border border-gray-300 dark:border-gray-700 rounded-lg p-2 space-y-1"
           >
-            <Label className="text-lg">{monitorData.name}</Label>
-            <div className="flex justify-between">
-              {monitorData.data.map((data, index) => (
-                <HoverCard key={`data-${index}`} className="">
-                  <HoverCardTrigger>
-                    <div className="h-8 w-4 bg-green-400 rounded-sm"></div>
-                  </HoverCardTrigger>
-                  <HoverCardContent className="max-w-max">
-                    <div className="">
-                      {new Date(data.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                      <Separator className="mt-2 mb-2" />
-                      <div className="flex flex-col space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <p className="text-green-500">Success:</p>
-                          <p>{data.success}</p>
-                        </div>
-                        <div className="flex justify-between">
-                          <p className="text-red-600">Failure:</p>
-                          <p> {data.fail}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              ))}
+            <Label className="text-base">{monitorData.name}</Label>
+            <div className="flex gap-0.5 sm:gap-2 md:gap-3 justify-between">
               {Array.from({ length: 30 - monitorData.data.length }).map(
                 (_, index) => (
                   <div
                     key={`empty-${index}`}
-                    className="h-8 w-4 bg-gray-200 dark:bg-gray-800 rounded-sm"
+                    className="h-8 flex-1 bg-gray-200 dark:bg-gray-800 rounded-sm"
                   ></div>
                 )
               )}
+              {monitorData.data.map((data, index) => (
+                <div key={`data-${index}`} className="flex-1">
+                  <HoverCard>
+                    <HoverCardTrigger>
+                      <div className="h-8 bg-green-400 rounded-sm"></div>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="max-w-max">
+                      <div className="">
+                        {new Date(data.date).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                        <Separator className="mt-2 mb-2" />
+                        <div className="flex flex-col space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <p className="text-green-500">Success:</p>
+                            <p>{data.success}</p>
+                          </div>
+                          <div className="flex justify-between">
+                            <p className="text-red-600">Failure:</p>
+                            <p> {data.fail}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                </div>
+              ))}
             </div>
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-              <p>Today</p>
+            <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
               <p>30 days ago</p>
+              <p>Today</p>
             </div>
           </div>
         ))}
