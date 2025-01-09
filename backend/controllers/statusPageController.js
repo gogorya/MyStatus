@@ -4,7 +4,7 @@ const getStatusPages = async (req, res) => {
   try {
     const { orgId } = req.auth;
     const statusPages = await statusPageService.getStatusPages(orgId);
-    res.status(201).json({ data: { statusPages } });
+    res.status(200).json({ data: { statusPages } });
   } catch (error) {
     res.status(500).json({
       message: "Unable to get status pages",
@@ -20,14 +20,14 @@ const createStatusPage = async (req, res) => {
     const createdStatusPage = await statusPageService.createStatusPage(data);
     res.status(201).json({
       data: {
+        ok: true,
         statusPage: createdStatusPage,
       },
     });
   } catch (error) {
     if (error.message === "Slug already exists") {
-      res.status(409).json({
-        message: "Slug already exists, please try a different name",
-        error: error.message,
+      res.status(201).json({
+        data: { ok: false },
       });
     } else {
       res.status(500).json({
@@ -45,6 +45,7 @@ const updateStatusPage = async (req, res) => {
     const updatedStatusPage = await statusPageService.updateStatusPage(data);
     res.status(201).json({
       data: {
+        ok: true,
         statusPage: updatedStatusPage,
       },
     });

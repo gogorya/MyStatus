@@ -36,7 +36,7 @@ import {
   deleteStatusPage,
 } from "@/lib/apiEndpoints";
 import { generateSlug } from "@/lib/utils";
-import { axiosPost } from "@/lib/utils";
+import { axiosPost } from "../../../actions";
 
 export default function Page() {
   // states
@@ -150,20 +150,20 @@ export default function Page() {
         token,
         data
       );
-      if (statusPage._id != null) {
-        setStatusPages((prevItems) =>
-          prevItems.filter((item) => item._id !== statusPage._id)
-        );
-      }
-      setStatusPages((prevItems) => [...prevItems, res.data.statusPage]);
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
+      if (!!res.data.ok) {
+        if (statusPage._id != null) {
+          setStatusPages((prevItems) =>
+            prevItems.filter((item) => item._id !== statusPage._id)
+          );
+        }
+        setStatusPages((prevItems) => [...prevItems, res.data.statusPage]);
+      } else {
         toast("Slug for the page already exists", {
           description: "Please create with a new one",
         });
-      } else {
-        console.error(error);
       }
+    } catch (error) {
+      console.error(error);
     }
   };
 

@@ -31,7 +31,8 @@ import {
   updateMonitor,
   deleteMonitor,
 } from "@/lib/apiEndpoints";
-import { axiosPost, checkLink } from "@/lib/utils";
+import { checkLink } from "@/lib/utils";
+import { axiosPost } from "../../../actions";
 
 export default function Page() {
   // states

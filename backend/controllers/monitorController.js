@@ -4,7 +4,7 @@ const getMonitors = async (req, res) => {
   try {
     const { orgId } = req.auth;
     const monitors = await monitorService.getMonitors(orgId);
-    res.status(201).json({ data: { monitors } });
+    res.status(200).json({ data: { monitors } });
   } catch (error) {
     res.status(500).json({
       message: "Unable to get monitors",
