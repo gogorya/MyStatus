@@ -30,8 +30,30 @@ export default function Page() {
       const slug = params["status-page-slug"];
       try {
         const res = await getDataPublicAction(getStatusPageData, slug);
-        if (res.data.ok) setMonitorsData(res.data.statusPagePublic);
-        else setPageExists(false);
+        if (res.data.ok) {
+          const updatedData = res.data.statusPagePublic.map((monitor) => {
+            let totSuccess = 0;
+            let totFail = 0;
+            const updatedMonitorData = monitor.data.map((it) => {
+              totSuccess += it.success;
+              totFail += it.fail;
+              return {
+                ...it,
+                uptime: ((it.success / (it.success + it.fail)) * 100).toFixed(
+                  1
+                ),
+              };
+            });
+            return {
+              ...monitor,
+              data: updatedMonitorData,
+              uptime: ((totSuccess / (totSuccess + totFail)) * 100).toFixed(1),
+            };
+          });
+          setMonitorsData(updatedData);
+        } else {
+          setPageExists(false);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -53,9 +75,15 @@ export default function Page() {
         {monitorsData.map((monitorData) => (
           <div
             key={monitorData.id}
-            className="border border-gray-300 dark:border-gray-700 rounded-lg p-2 space-y-1"
+            className="border border-gray-300 dark:border-gray-700 rounded-lg p-2 space-y-2"
           >
-            <Label className="text-base">{monitorData.name}</Label>
+            <div className="flex justify-between items-center">
+              <Label className="text-base">{monitorData.name}</Label>
+              <div className="text-base">
+                <span>{monitorData.uptime}</span>
+                <span className="font-light">%</span>
+              </div>
+            </div>
             <div className="flex gap-0.5 sm:gap-2 md:gap-3 justify-between">
               {Array.from({ length: 30 - monitorData.data.length }).map(
                 (_, index) => (
@@ -69,25 +97,39 @@ export default function Page() {
                 <div key={`data-${index}`} className="flex-1">
                   <HoverCard>
                     <HoverCardTrigger>
-                      <div className="h-8 bg-green-400 rounded-sm"></div>
+                      <div
+                        className={`h-8 ${
+                          data.uptime >= 98
+                            ? "bg-green-400"
+                            : data.uptime >= 95
+                            ? "bg-yellow-400"
+                            : "bg-red-400"
+                        } rounded-sm`}
+                      ></div>
                     </HoverCardTrigger>
                     <HoverCardContent className="max-w-max">
-                      <div className="">
-                        {new Date(data.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
-                        <Separator className="mt-2 mb-2" />
-                        <div className="flex flex-col space-y-2 text-sm">
-                          <div className="flex justify-between">
-                            <p className="text-green-500">Success:</p>
-                            <p>{data.success}</p>
-                          </div>
-                          <div className="flex justify-between">
-                            <p className="text-red-600">Failure:</p>
-                            <p> {data.fail}</p>
-                          </div>
+                      <div className="text-xs space-y-1">
+                        <div className="flex justify-between gap-3 text-base">
+                          <span>
+                            {new Date(data.date).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                            :
+                          </span>
+                          <span>
+                            {data.uptime}
+                            <span className="font-light">%</span>
+                          </span>
+                        </div>
+                        <Separator />
+                        <div className="flex justify-between">
+                          <span>Failed:</span>
+                          <span className="text-red-500">{data.fail}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Succeeded:</span>
+                          <span className="text-green-500">{data.success}</span>
                         </div>
                       </div>
                     </HoverCardContent>
@@ -96,8 +138,8 @@ export default function Page() {
               ))}
             </div>
             <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-              <p>30 days ago</p>
-              <p>Today</p>
+              <span>30 days ago</span>
+              <span>Today</span>
             </div>
           </div>
         ))}
