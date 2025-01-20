@@ -6,7 +6,7 @@ const activeMonitorSchema = new mongoose.Schema({
     required: true,
     immutable: true,
   },
-  id: {
+  monitorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Monitor",
     required: true,
@@ -20,4 +20,5 @@ const activeMonitorSchema = new mongoose.Schema({
 });
 
 const ActiveMonitor = mongoose.model("ActiveMonitor", activeMonitorSchema);
+
 module.exports = ActiveMonitor;

@@ -1,15 +1,6 @@
 "use client";
 
-// auth
-import { SignedIn, UserButton, OrganizationSwitcher } from "@clerk/nextjs";
-import Link from "next/link";
-
-// hooks
-import { useAuth } from "@clerk/nextjs";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-
-// ui components
+// UI components
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -18,17 +9,30 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Label } from "@/components/ui/label";
-
-// components
 import { Card } from "./ui/card";
+
+// Hooks
+import { useAuth } from "@clerk/nextjs";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+
+// Clerk and utilities
+import { SignedIn, UserButton, OrganizationSwitcher } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function Navbar() {
   const { orgSlug } = useAuth();
   const path = usePathname();
   const pathSegments = path.split("/");
+
+  // States
   const [onDashboard, setOnDashboard] = useState(false);
 
-  if (!onDashboard && pathSegments[1] === "dashboard") setOnDashboard(true);
+  if (
+    !onDashboard &&
+    (pathSegments[1] === "dashboard" || pathSegments[1] === "")
+  )
+    setOnDashboard(true);
 
   return (
     <Card className="header sticky top-5">
@@ -39,48 +43,54 @@ export default function Navbar() {
           </Label>
         </div>
 
-        {onDashboard && (
+        {onDashboard ? (
           <>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <SignedIn>
-                  <NavigationMenuItem>
-                    <Link
-                      href={`/dashboard/${orgSlug}/monitors`}
-                      legacyBehavior
-                      passHref
-                    >
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
+            <div>
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <SignedIn>
+                    <NavigationMenuItem>
+                      <Link
+                        href={`/dashboard/${orgSlug}/monitors`}
+                        legacyBehavior
+                        passHref
                       >
-                        Monitors
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <Link
-                      href={`/dashboard/${orgSlug}/status-pages`}
-                      legacyBehavior
-                      passHref
-                    >
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                        >
+                          Monitors
+                        </NavigationMenuLink>
+                      </Link>
+                    </NavigationMenuItem>
+                    <NavigationMenuItem>
+                      <Link
+                        href={`/dashboard/${orgSlug}/status-pages`}
+                        legacyBehavior
+                        passHref
                       >
-                        Status Pages
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                </SignedIn>
-              </NavigationMenuList>
-            </NavigationMenu>
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                        >
+                          Status Pages
+                        </NavigationMenuLink>
+                      </Link>
+                    </NavigationMenuItem>
+                  </SignedIn>
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
 
             <div className="justify-self-end">
               <SignedIn>
                 <OrganizationSwitcher />
-
                 <UserButton />
               </SignedIn>
             </div>
+          </>
+        ) : (
+          <>
+            <div></div>
+            <div></div>
           </>
         )}
       </div>

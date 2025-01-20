@@ -1,10 +1,10 @@
 "use client";
 
-// components
+// Components
 import Dashboard from "@/components/Dashboard";
 import MonitorTable from "@/components/MonitorTable";
 
-// ui components
+// UI components
 import {
   DialogContent,
   DialogDescription,
@@ -18,13 +18,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-// hooks
+// Next.js
 import Form from "next/form";
+
+// Hooks
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
-// lib
-import { getDataAction } from "../../../actions";
+// Library
 import {
   getMonitors,
   createMonitor,
@@ -32,10 +33,10 @@ import {
   deleteMonitor,
 } from "@/lib/apiEndpoints";
 import { checkLink } from "@/lib/utils";
-import { axiosPost } from "../../../actions";
+import { axiosPost, getDataAction } from "../../../actions";
 
 export default function Page() {
-  // states
+  // States
   const [monitor, setMonitor] = useState({
     name: "",
     link: "",
@@ -45,6 +46,7 @@ export default function Page() {
   const [monitors, setMonitors] = useState([]);
   const [isLinkValid, setIsLinkValid] = useState(false);
 
+  // Fetch Monitors data when the component mounts
   useEffect(() => {
     const fetchMonitors = async () => {
       const res = await getDataAction(getMonitors);
@@ -53,8 +55,8 @@ export default function Page() {
     fetchMonitors();
   }, []);
 
-  // handle state changes
-  const handleActiveStatus = () => {
+  // Handle state changes
+  const handleStatusChange = () => {
     setMonitor({ ...monitor, active: !monitor.active });
   };
   const handleNameChange = (e) => {
@@ -65,9 +67,12 @@ export default function Page() {
     if (checkLink(e.target.value)) setIsLinkValid(true);
     else setIsLinkValid(false);
   };
+
+  // Handle button operations
   const handleCreate = () => {
     setMonitor({ name: "", link: "", active: true, _id: null });
   };
+
   const handleEdit = (_id) => {
     const monitorToEdit = monitors.find((monitor) => monitor._id === _id);
     if (monitorToEdit) {
@@ -84,7 +89,6 @@ export default function Page() {
 
   const { getToken } = useAuth();
 
-  // handle delete
   const handleDelete = async (_id) => {
     try {
       const token = await getToken();
@@ -96,7 +100,6 @@ export default function Page() {
     setMonitors((prevItems) => prevItems.filter((item) => item._id !== _id));
   };
 
-  // handle save
   const handleSave = async () => {
     const data = {
       name: monitor.name,
@@ -124,68 +127,69 @@ export default function Page() {
     }
   };
 
-  const dialogContent = () => {
-    return (
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {monitor._id == null ? "Create " : "Edit "}Monitor
-          </DialogTitle>
-          <DialogDescription>Please ensure link is proper</DialogDescription>
-        </DialogHeader>
-        <div>
-          <Form className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <Label>Name</Label>
-                <div className="flex items-center space-x-2">
-                  <Label htmlFor="airplane-mode">Active</Label>
-                  <Switch
-                    checked={monitor.active}
-                    onCheckedChange={handleActiveStatus}
-                  />
-                </div>
-              </div>
-              <Input
-                type="text"
-                placeholder="My website"
-                onChange={handleNameChange}
-                value={monitor.name}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Link</Label>
-              <Input
-                type="text"
-                placeholder="https://mywebsite.com"
-                onChange={handleLinkChange}
-                value={monitor.link}
-              />
-            </div>
-          </Form>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              onClick={handleSave}
-              disabled={
-                monitor.name === "" || monitor.link === "" || !isLinkValid
-              }
-            >
-              Save
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    );
-  };
+  // Dialog content for creating or editing a Monitor
+  const dialogContent = (
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>
+          {monitor._id == null ? "Create " : "Edit "}Monitor
+        </DialogTitle>
+        <DialogDescription>Please ensure link is proper</DialogDescription>
+      </DialogHeader>
 
-  // props
+      <div>
+        <Form className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <Label>Name</Label>
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="airplane-mode">Active</Label>
+                <Switch
+                  checked={monitor.active}
+                  onCheckedChange={handleStatusChange}
+                />
+              </div>
+            </div>
+            <Input
+              type="text"
+              placeholder="My website"
+              onChange={handleNameChange}
+              value={monitor.name}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Link</Label>
+            <Input
+              type="text"
+              placeholder="https://mywebsite.com"
+              onChange={handleLinkChange}
+              value={monitor.link}
+            />
+          </div>
+        </Form>
+      </div>
+
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button
+            type="submit"
+            onClick={handleSave}
+            disabled={
+              monitor.name === "" || monitor.link === "" || !isLinkValid
+            }
+          >
+            Save
+          </Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
+  );
+
+  // Props
   const dashboardProps = {
     title: "Monitors",
     description: "Overview",
-    dialogContent: dialogContent(),
+    dialogContent: dialogContent,
     handleCreate: handleCreate,
   };
   const tableProps = {
@@ -195,7 +199,7 @@ export default function Page() {
       { name: "Active", class: "text-right" },
     ],
     rows: monitors,
-    dialogContent: dialogContent(),
+    dialogContent: dialogContent,
     handleEdit: handleEdit,
     handleDelete: handleDelete,
   };

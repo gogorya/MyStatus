@@ -20,14 +20,14 @@ const createStatusPage = async (req, res) => {
     const createdStatusPage = await statusPageService.createStatusPage(data);
     res.status(201).json({
       data: {
-        ok: true,
         statusPage: createdStatusPage,
       },
     });
   } catch (error) {
     if (error.message === "Slug already exists") {
       res.status(201).json({
-        data: { ok: false },
+        message: "The slug already exists, please try with another name",
+        error: error.message,
       });
     } else {
       res.status(500).json({
@@ -45,7 +45,6 @@ const updateStatusPage = async (req, res) => {
     const updatedStatusPage = await statusPageService.updateStatusPage(data);
     res.status(201).json({
       data: {
-        ok: true,
         statusPage: updatedStatusPage,
       },
     });

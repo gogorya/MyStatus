@@ -31,4 +31,5 @@ const statusPageSchema = new mongoose.Schema({
 });
 
 const StatusPage = mongoose.model("StatusPage", statusPageSchema);
+
 module.exports = StatusPage;

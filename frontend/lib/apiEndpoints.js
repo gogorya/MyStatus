@@ -1,21 +1,21 @@
-// public
+// Public
 const getStatusPageData = "/public/get-status-page-data";
 
-// private
-// monitors
+// Private
+// Monitors
 const monitors = "/api/monitors";
-// get
+// Get
 const getMonitors = `${monitors}/get`;
-// post
+// Post
 const createMonitor = `${monitors}/create`;
 const updateMonitor = `${monitors}/update`;
 const deleteMonitor = `${monitors}/delete`;
 
-// status-pages
+// Status-pages
 const statusPages = "/api/status-pages";
-// get
+// Get
 const getStatusPages = `${statusPages}/get`;
-// post
+// Post
 const createStatusPage = `${statusPages}/create`;
 const updateStatusPage = `${statusPages}/update`;
 const deleteStatusPage = `${statusPages}/delete`;

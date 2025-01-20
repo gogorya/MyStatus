@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
 const activeMonitorDataSchema = new mongoose.Schema({
-  id: {
+  orgId: {
+    type: String,
+    required: true,
+    immutable: true,
+  },
+  monitorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Monitor",
     required: true,
@@ -28,17 +33,9 @@ const activeMonitorDataSchema = new mongoose.Schema({
   ],
 });
 
-// Add it later in checkStatus
-activeMonitorDataSchema.methods.removeOldRecords = async function () {
-  const sixMonthsAgo = new Date();
-  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-
-  this.data = this.data.filter((record) => record.date >= sixMonthsAgo);
-  await this.save();
-};
-
 const ActiveMonitorData = mongoose.model(
   "ActiveMonitorData",
   activeMonitorDataSchema
 );
+
 module.exports = ActiveMonitorData;

@@ -1,23 +1,27 @@
 const express = require("express");
 const cors = require("cors");
 const { requireAuth } = require("@clerk/express");
+
 const monitorRoutes = require("./routes/monitorRoutes");
 const statusPageRoutes = require("./routes/statusPageRoutes");
 const statusPagePublicRoutes = require("./routes/statusPagePublicRoutes");
+
 const connectDB = require("./config/database");
-const { startCheckStatus } = require("./jobs/checkStatus");
+const startCheckStatus = require("./jobs/checkStatus");
+
+require("dotenv").config();
 
 const app = express();
-require("dotenv").config();
 
 app.use(express.json());
 app.use(cors()); // fix for production // add helmet?
 
 startCheckStatus();
 
-// public
+// Public
 app.use("/public", statusPagePublicRoutes);
-// private
+
+// Private
 app.use("/api/monitors", requireAuth(), monitorRoutes);
 app.use("/api/status-pages", requireAuth(), statusPageRoutes);
 

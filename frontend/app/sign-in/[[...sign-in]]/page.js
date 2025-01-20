@@ -1,5 +1,6 @@
-import { SignIn } from "@clerk/nextjs";
 import Dashboard from "@/components/Dashboard";
+
+import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {
   return (

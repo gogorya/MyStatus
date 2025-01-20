@@ -1,4 +1,7 @@
+// Clerk utilities
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+
+// NextResponse for server responses
 import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
@@ -11,20 +14,11 @@ export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
     await auth.protect();
 
-    // make it simpler
     const { orgSlug } = await auth();
     const url = request.nextUrl.clone();
     const seg = url.pathname.split("/");
-    if (
-      seg[1] === "dashboard" &&
-      (String(seg[2]) === "null" ||
-        String(seg[2]) === "undefined" ||
-        seg[2] == null)
-    ) {
+    if (seg[1] === "dashboard" && seg[2] !== orgSlug) {
       url.pathname = `/`;
-      return NextResponse.redirect(url);
-    } else if (seg[1] === "dashboard" && seg[2] !== orgSlug) {
-      url.pathname = `/dashboard/${orgSlug}/monitors`;
       return NextResponse.redirect(url);
     }
   }

@@ -30,4 +30,5 @@ const monitorSchema = new mongoose.Schema({
 });
 
 const Monitor = mongoose.model("Monitor", monitorSchema);
+
 module.exports = Monitor;

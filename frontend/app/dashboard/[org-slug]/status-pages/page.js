@@ -1,10 +1,10 @@
 "use client";
 
-// components
+// Components
 import Dashboard from "@/components/Dashboard";
 import StatusPageTable from "@/components/StatusPageTable";
 
-// ui components
+// UI components
 import {
   DialogContent,
   DialogDescription,
@@ -21,13 +21,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 
-// hooks
+// Next.js
 import Form from "next/form";
+
+// Hooks
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
-// lib
-import { getDataAction } from "../../../actions";
+// Library
 import {
   getMonitors,
   getStatusPages,
@@ -36,10 +37,10 @@ import {
   deleteStatusPage,
 } from "@/lib/apiEndpoints";
 import { generateSlug } from "@/lib/utils";
-import { axiosPost } from "../../../actions";
+import { axiosPost, getDataAction } from "../../../actions";
 
 export default function Page() {
-  // states
+  // States
   const [statusPage, setStatusPage] = useState({
     name: "",
     slug: "",
@@ -49,6 +50,7 @@ export default function Page() {
   });
   const [statusPages, setStatusPages] = useState([]);
 
+  // Fetch Status Pages data when the component mounts
   useEffect(() => {
     const fetchStatusPages = async () => {
       const res = await getDataAction(getStatusPages);
@@ -57,8 +59,8 @@ export default function Page() {
     fetchStatusPages();
   }, []);
 
-  // handle state changes
-  const handleActiveStatus = () => {
+  // Handle state changes
+  const handleStatusChange = () => {
     setStatusPage({ ...statusPage, active: !statusPage.active });
   };
   const handleNameChange = (e) => {
@@ -68,6 +70,8 @@ export default function Page() {
       setStatusPage({ ...statusPage, name, slug });
     }
   };
+
+  // Handle button operations
   const handleCreate = async () => {
     try {
       const res = await getDataAction(getMonitors);
@@ -88,6 +92,7 @@ export default function Page() {
       console.error("Failed to fetch monitors:", error);
     }
   };
+
   const handleEdit = async (_id) => {
     const statusPageToEdit = statusPages.find(
       (statusPage) => statusPage._id === _id
@@ -116,7 +121,6 @@ export default function Page() {
 
   const { getToken } = useAuth();
 
-  // handle delete
   const handleDelete = async (_id) => {
     try {
       const token = await getToken();
@@ -128,7 +132,6 @@ export default function Page() {
     setStatusPages((prevItems) => prevItems.filter((item) => item._id !== _id));
   };
 
-  // handle save
   const handleSave = async () => {
     const data = {
       name: statusPage.name,
@@ -150,14 +153,14 @@ export default function Page() {
         token,
         data
       );
-      if (!!res.data.ok) {
+      if (res && res.data) {
         if (statusPage._id != null) {
           setStatusPages((prevItems) =>
             prevItems.filter((item) => item._id !== statusPage._id)
           );
         }
         setStatusPages((prevItems) => [...prevItems, res.data.statusPage]);
-      } else {
+      } else if (res && res.error === "Slug already exists") {
         toast("Slug for the page already exists", {
           description: "Please create with a new one",
         });
@@ -167,90 +170,91 @@ export default function Page() {
     }
   };
 
-  const dialogContent = () => {
-    return (
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            {statusPage._id == null ? "Create " : "Edit "}Status Page
-          </DialogTitle>
-          <DialogDescription>Slug needs to be unique</DialogDescription>
-        </DialogHeader>
-        <div>
-          <Form className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <Label>Name</Label>
-                <div className="flex items-center space-x-2">
-                  <Label htmlFor="airplane-mode">Active</Label>
-                  <Switch
-                    checked={statusPage.active}
-                    onCheckedChange={handleActiveStatus}
-                  />
-                </div>
-              </div>
-              <Input
-                type="text"
-                placeholder="My Status Page"
-                onChange={handleNameChange}
-                value={statusPage.name}
-                disabled={statusPage._id != null}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Slug</Label>
-              <Input
-                type="text"
-                placeholder="my-status-page"
-                value={statusPage.slug}
-                disabled={true}
-              />
-            </div>
-            <Separator />
-            <div className="space-y-2">
-              <Label>Monitors</Label>
-              <div className="space-y-1">
-                {statusPage.monitors.map((monitor, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={monitor.selected}
-                      onCheckedChange={() => {
-                        const updatedMonitors = [...statusPage.monitors];
-                        updatedMonitors[index].selected =
-                          !updatedMonitors[index].selected;
-                        setStatusPage({
-                          ...statusPage,
-                          monitors: updatedMonitors,
-                        });
-                      }}
-                    />
-                    <Label>{monitor.name}</Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Form>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              type="submit"
-              onClick={handleSave}
-              disabled={statusPage.name === ""}
-            >
-              Save
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    );
-  };
+  // Dialog content for creating or editing a Status Page
+  const dialogContent = (
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>
+          {statusPage._id == null ? "Create " : "Edit "}Status Page
+        </DialogTitle>
+        <DialogDescription>Slug needs to be unique</DialogDescription>
+      </DialogHeader>
 
-  // props
+      <div>
+        <Form className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <Label>Name</Label>
+              <div className="flex items-center space-x-2">
+                <Label htmlFor="airplane-mode">Active</Label>
+                <Switch
+                  checked={statusPage.active}
+                  onCheckedChange={handleStatusChange}
+                />
+              </div>
+            </div>
+            <Input
+              type="text"
+              placeholder="My Status Page"
+              onChange={handleNameChange}
+              value={statusPage.name}
+              disabled={statusPage._id != null}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Slug</Label>
+            <Input
+              type="text"
+              placeholder="my-status-page"
+              value={statusPage.slug}
+              disabled={true}
+            />
+          </div>
+          <Separator />
+          <div className="space-y-2">
+            <Label>Monitors</Label>
+            <div className="space-y-1">
+              {statusPage.monitors.map((monitor, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={monitor.selected}
+                    onCheckedChange={() => {
+                      const updatedMonitors = [...statusPage.monitors];
+                      updatedMonitors[index].selected =
+                        !updatedMonitors[index].selected;
+                      setStatusPage({
+                        ...statusPage,
+                        monitors: updatedMonitors,
+                      });
+                    }}
+                  />
+                  <Label>{monitor.name}</Label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Form>
+      </div>
+
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button
+            type="submit"
+            onClick={handleSave}
+            disabled={statusPage.name === ""}
+          >
+            Save
+          </Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
+  );
+
+  // Props
   const dashboardProps = {
     title: "Status Pages",
     description: "Overview",
-    dialogContent: dialogContent(),
+    dialogContent: dialogContent,
     handleCreate: handleCreate,
   };
   const tableProps = {
@@ -261,7 +265,7 @@ export default function Page() {
       { name: "Active", class: "text-right" },
     ],
     rows: statusPages,
-    dialogContent: dialogContent(),
+    dialogContent: dialogContent,
     handleEdit: handleEdit,
     handleDelete: handleDelete,
   };

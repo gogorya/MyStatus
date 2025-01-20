@@ -1,19 +1,25 @@
 const axios = require("axios");
 const Agenda = require("agenda");
 const async = require("async");
+
 const ActiveMonitor = require("../models/ActiveMonitor");
 const ActiveMonitorData = require("../models/ActiveMonitorData");
+
 require("dotenv").config();
 
 const agenda = new Agenda({
   db: { address: process.env.MONGODB_URI },
 });
 
-const savePingData = async (id, success) => {
-  const monitorData = await ActiveMonitorData.findOne({ id: id });
+const savePingData = async (monitorId, orgId, success) => {
+  let monitorData = await ActiveMonitorData.findOne({ monitorId: monitorId });
   const currentDate = new Date().toISOString().split("T")[0];
   if (!monitorData) {
-    monitorData = new ActiveMonitorData({ id: id, data: [] });
+    monitorData = new ActiveMonitorData({
+      monitorId: monitorId,
+      orgId: orgId,
+      data: [],
+    });
   }
 
   const lastRecord = monitorData.data[monitorData.data.length - 1];
@@ -34,6 +40,7 @@ const savePingData = async (id, success) => {
       fail: success ? 0 : 1,
     });
   }
+
   await monitorData.save();
 };
 
@@ -45,7 +52,7 @@ agenda.define("check status", async () => {
       const response = await axios.get(monitor.link);
       try {
         // response.status >= 200 && response.status < 300;
-        await savePingData(monitor.id, true);
+        await savePingData(monitor.monitorId, monitor.orgId, true);
       } catch (error) {
         console.error(`Failed to save ping data for ${monitor.link}:`, error);
       }
@@ -53,7 +60,7 @@ agenda.define("check status", async () => {
       if (error.request || error.response) {
         try {
           // error.request || (error.response.status >= 400 && error.response.status < 600))
-          await savePingData(monitor.id, false);
+          await savePingData(monitor.monitorId, monitor.orgId, false);
         } catch (error) {
           console.error(`Failed to save ping data for ${monitor.link}:`, error);
         }
@@ -78,4 +85,4 @@ const startCheckStatus = async () => {
   console.log("Check status started");
 };
 
-module.exports = { startCheckStatus };
+module.exports = startCheckStatus;

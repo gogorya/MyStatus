@@ -53,8 +53,6 @@ MyStatus is a web application for monitoring the status of various web services.
   CLERK_SECRET_KEY=your-clerk-api-key
   NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
   NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-  NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
-  NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
   API_HOST=your-api-host
   ```
 
@@ -102,18 +100,14 @@ MyStatus is a web application for monitoring the status of various web services.
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-## Acknowledgements
+<!-- ## Acknowledgements
 
 - [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [MongoDB](https://www.mongodb.com/)
 - [Clerk](https://clerk.dev/)
 - [Agenda](https://github.com/agenda/agenda)
-- [Axios](https://axios-http.com/)
+- [Axios](https://axios-http.com/) -->
 
 ## To do
 
