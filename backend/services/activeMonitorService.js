@@ -2,7 +2,7 @@ const ActiveMonitor = require("../models/ActiveMonitor");
 
 const activeMonitorExists = async (id) => {
   try {
-    const activeMonitor = await ActiveMonitor.findOne({ id });
+    const activeMonitor = await ActiveMonitor.findOne({ monitorId: id });
     return activeMonitor !== null;
   } catch (error) {
     throw new Error(
@@ -23,7 +23,9 @@ const createActiveMonitor = async (data) => {
 
 const deleteActiveMonitor = async (data) => {
   try {
-    const activeMonitorToDelete = await ActiveMonitor.findOne({ id: data.id });
+    const activeMonitorToDelete = await ActiveMonitor.findOne({
+      monitorId: data.monitorId,
+    });
     if (activeMonitorToDelete.orgId.toString() !== data.orgId.toString()) {
       throw new Error("Unauthorized");
     }
