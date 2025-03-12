@@ -27,6 +27,12 @@ const monitorSchema = new mongoose.Schema({
     default: true,
     required: true,
   },
+  incidents: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Incident",
+    },
+  ],
 });
 
 const Monitor = mongoose.model("Monitor", monitorSchema);

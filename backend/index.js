@@ -5,6 +5,7 @@ const { requireAuth } = require("@clerk/express");
 const monitorRoutes = require("./routes/monitorRoutes");
 const statusPageRoutes = require("./routes/statusPageRoutes");
 const statusPagePublicRoutes = require("./routes/statusPagePublicRoutes");
+const incidentRoutes = require("./routes/incidentRoutes");
 
 const connectDB = require("./config/database");
 const startCheckStatus = require("./jobs/checkStatus");
@@ -24,6 +25,7 @@ app.use("/public", statusPagePublicRoutes);
 // Private
 app.use("/api/monitors", requireAuth(), monitorRoutes);
 app.use("/api/status-pages", requireAuth(), statusPageRoutes);
+app.use("/api/incidents", incidentRoutes);
 
 connectDB();
 
