@@ -20,6 +20,15 @@ const createStatusPage = `${statusPages}/create`;
 const updateStatusPage = `${statusPages}/update`;
 const deleteStatusPage = `${statusPages}/delete`;
 
+// Incidents
+const incidents = "/api/incidents";
+// Get
+const getIncidents = `${incidents}/get`;
+// Post
+const createIncident = `${incidents}/create`;
+const updateIncident = `${incidents}/update`;
+const deleteIncident = `${incidents}/delete`;
+
 module.exports = {
   getStatusPageData,
   getMonitors,
@@ -30,4 +39,8 @@ module.exports = {
   createStatusPage,
   updateStatusPage,
   deleteStatusPage,
+  getIncidents,
+  createIncident,
+  updateIncident,
+  deleteIncident,
 };

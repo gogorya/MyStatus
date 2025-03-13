@@ -25,7 +25,7 @@ app.use("/public", statusPagePublicRoutes);
 // Private
 app.use("/api/monitors", requireAuth(), monitorRoutes);
 app.use("/api/status-pages", requireAuth(), statusPageRoutes);
-app.use("/api/incidents", incidentRoutes);
+app.use("/api/incidents", requireAuth(), incidentRoutes);
 
 connectDB();
 

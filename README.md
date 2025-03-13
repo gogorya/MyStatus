@@ -89,12 +89,13 @@ MyStatus is a web application for monitoring the status of various web services.
 - backend: Contains the backend services, controllers, and routes
 - `models/`: Contains the Mongoose models
 - `jobs/`: Contains the job scheduling logic using Agenda
+- `services/`: Contains business logic and functions that handle data processing.
 
 ## Scripts
 
-- `npm run dev`: Runs the development server
-- `npm run build`: Builds the application for production
-- `npm start`: Starts the production server
+- `npm run dev`: Runs the development server (Frontend & Backend)
+- `npm run build`: Builds the application for production (Frontend)
+- `npm start`: Starts the production server (Frontend & Backend)
 
 ## Contributing
 
@@ -111,21 +112,23 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## To do
 
-- Integrate Incident and Maintenance
+- Add dark mode toggle button, fix Clerk theming
 - Socket connection for live updates
 - Checking for improvements in code architecture and database design
+- Finding and improving edge cases, response formatting, and other minor bugs
+- Improve UI responsiveness on mobile devices
+- Figure out proper indexing for database fields
 
 ## Known Issues
 
 - Dropdown menu for Editing remains open
 - Hover card does not work on mobile
+- Old data remains persistent on Monitor link change
 
-```
+<!-- ### Explanation:
 
-### Explanation:
 1. **Features and Technologies Used**: Lists the main features and technologies used in the project.
 2. **Getting Started**: Provides instructions for setting up the project locally, including prerequisites, installation steps, and how to run the development server.
 3. **Project Structure**: Describes the main directories and their purposes.
 4. **Scripts**: Lists the available npm scripts for development and production.
-5. **Contributing, License, and Acknowledgements**: #Encourages contributions, specifies the project's license, and credits the main technologies and libraries used in the project.
-```
+5. **Contributing, License, and Acknowledgements**: Encourages contributions, specifies the project's license, and credits the main technologies and libraries used in the project. -->

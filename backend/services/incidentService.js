@@ -2,9 +2,14 @@ const monitorService = require("../services/monitorService.js");
 
 const Incident = require("../models/Incident.js");
 
-const cleanResponse = (obj) => {
+const formatResponse = (obj) => {
   delete obj.orgId;
   delete obj.__v;
+
+  obj.monitor = { _id: obj.monitorId._id, name: obj.monitorId.name };
+  delete obj.monitorId;
+
+  obj.statusHistory.reverse();
   return obj;
 };
 
@@ -12,9 +17,12 @@ const getIncidents = async (orgId) => {
   try {
     const incidents = await Incident.find({ orgId: orgId })
       .populate("monitorId", "name")
-      .select("-orgId -__v");
+      .lean();
+    for (let i of incidents) {
+      formatResponse(i);
+    }
 
-    return incidents;
+    return incidents.reverse();
   } catch (error) {
     throw new Error("Failed to get incidents: " + error.message);
   }
@@ -30,7 +38,10 @@ const createIncident = async (data) => {
     await newIncident.save();
     await monitorService.addIncident(data.monitorId, newIncident._id);
 
-    const savedIncident = cleanResponse(newIncident.toObject());
+    const savedIncident = await Incident.findById(newIncident._id)
+      .populate("monitorId", "name")
+      .lean();
+    formatResponse(savedIncident);
 
     return savedIncident;
   } catch (error) {
@@ -66,7 +77,10 @@ const updateIncident = async (data) => {
       throw new Error("Cannot update a resolved incident");
     }
 
-    const updatedIncident = cleanResponse(incidentToUpdate.toObject());
+    const updatedIncident = await Incident.findById(incidentToUpdate._id)
+      .populate("monitorId", "name")
+      .lean();
+    formatResponse(updatedIncident);
 
     return updatedIncident;
   } catch (error) {
@@ -85,9 +99,10 @@ const deleteIncident = async (data) => {
       incidentToDelete.monitorId,
       incidentToDelete._id
     );
-    await Incident.findByIdAndDelete(data._id);
-
-    const deletedIncident = cleanResponse(incidentToDelete.toObject());
+    const deletedIncident = await Incident.findByIdAndDelete(data._id)
+      .populate("monitorId", "name")
+      .lean();
+    formatResponse(deletedIncident);
 
     return deletedIncident;
   } catch (error) {

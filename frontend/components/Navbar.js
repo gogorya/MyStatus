@@ -75,6 +75,19 @@ export default function Navbar() {
                         </NavigationMenuLink>
                       </Link>
                     </NavigationMenuItem>
+                    <NavigationMenuItem>
+                      <Link
+                        href={`/dashboard/${orgSlug}/incidents`}
+                        legacyBehavior
+                        passHref
+                      >
+                        <NavigationMenuLink
+                          className={navigationMenuTriggerStyle()}
+                        >
+                          Incidents
+                        </NavigationMenuLink>
+                      </Link>
+                    </NavigationMenuItem>
                   </SignedIn>
                 </NavigationMenuList>
               </NavigationMenu>
