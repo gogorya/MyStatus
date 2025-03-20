@@ -33,6 +33,8 @@ if (process.env.NODE_ENV !== "development") {
       legacyHeaders: false,
     })
   );
+  // Number of proxies between user and server
+  app.set("trust proxy", 1);
 }
 
 // Route to keep cloud container active
