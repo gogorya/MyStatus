@@ -59,7 +59,7 @@ agenda.define("check status", async () => {
     } catch (error) {
       if (error.request || error.response) {
         try {
-          // error.request || (error.response.status >= 400 && error.response.status < 600))
+          // error.request || (error.response.status >= 300 && error.response.status < 600))
           await savePingData(monitor.monitorId, monitor.orgId, false);
         } catch (error) {
           console.error(`Failed to save ping data for ${monitor.link}:`, error);
@@ -74,7 +74,7 @@ agenda.define("check status", async () => {
 });
 
 agenda.on("ready", () => {
-  agenda.every("5 minutes", "check status");
+  agenda.every("1 minutes", "check status");
 });
 agenda.on("error", (error) => {
   console.error("Agenda error:", error);

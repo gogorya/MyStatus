@@ -20,6 +20,7 @@ MyStatus is a web application for monitoring the status of various web services.
 - Clerk for authentication
 - Agenda for job scheduling
 - Axios for HTTP requests
+- cors, helmet, express-rate-limit
 
 ## Getting Started
 
@@ -60,7 +61,8 @@ MyStatus is a web application for monitoring the status of various web services.
   ```env
   MONGODB_URI=mongodb://localhost:27017/yourdbname
   CLERK_PUBLISHABLE_KEY=your-clerk-public-key
-  CLERK_API_KEY=your-clerk-api-key
+  CLERK_SECRET_KEY=your-clerk-api-key
+  NODE_ENV=development
   ```
 
 4. Run the development server:
