@@ -34,8 +34,13 @@ if (process.env.NODE_ENV !== "development") {
     })
   );
   // Number of proxies between user and server
-  app.set("trust proxy", 1);
+  app.set("trust proxy", process.env.PROXIES);
 }
+
+app.get("/ip", (req, res) => {
+  res.send(req.ip);
+  console.log("ip: ", req.ip, req.ips);
+});
 
 // Route to keep cloud container active
 app.get("/ping", (req, res) => {
