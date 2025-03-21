@@ -20,12 +20,12 @@ require("dotenv").config();
 // Configure Express app
 const app = express();
 
+// Number of proxies between user and server
+app.set("trust proxy", process.env.PROXIES);
 app.use(express.json());
 app.use(cors({ origin: process.env.ORIGIN || "http://localhost:3000" }));
 app.use(helmet());
 if (process.env.NODE_ENV !== "development") {
-  // Number of proxies between user and server
-  app.set("trust proxy", process.env.PROXIES);
   app.use(
     rateLimit({
       // 25 requests per 15 minutes
