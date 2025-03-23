@@ -20,7 +20,7 @@ MyStatus is a web application for monitoring the status of various web services.
 - Clerk for authentication
 - Agenda for job scheduling
 - Axios for HTTP requests
-- cors, helmet, express-rate-limit
+- cors, helmet
 
 ## Getting Started
 

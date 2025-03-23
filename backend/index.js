@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const { requireAuth } = require("@clerk/express");
 const helmet = require("helmet");
-const { rateLimit } = require("express-rate-limit");
 
 // Routes
 const monitorRoutes = require("./routes/monitorRoutes");
@@ -23,19 +22,6 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: process.env.ORIGIN || "http://localhost:3000" }));
 app.use(helmet());
-if (process.env.NODE_ENV !== "development") {
-  // Number of proxies between user and server
-  app.set("trust proxy", parseInt(process.env.PROXIES));
-  app.use(
-    rateLimit({
-      // 25 requests per 15 minutes
-      windowMs: 15 * 60 * 1000,
-      limit: 25,
-      standardHeaders: true,
-      legacyHeaders: false,
-    })
-  );
-}
 
 // Route to keep cloud container active
 app.get("/ping", (req, res) => {
