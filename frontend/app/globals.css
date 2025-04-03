@@ -14,6 +14,6 @@
 
 @layer components {
   .header {
-    @apply h-14 p-2 flex justify-center items-center;
+    @apply min-h-16 pl-6 pr-6 pt-2 pb-2;
   }
 }

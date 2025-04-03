@@ -35,9 +35,9 @@ export default function Navbar() {
     setOnDashboard(true);
 
   return (
-    <Card className="header sticky top-5">
-      <div className="grid grid-cols-3 w-full items-center p-5">
-        <div className="justify-self-start">
+    <Card className="header flex items-start sticky top-5 h-24 sm:h-auto sm:items-center">
+      <div className="flex w-full justify-between items-center">
+        <div>
           <Label className="text-sky-600 dark:text-sky-400 text-lg">
             MyStatus
           </Label>
@@ -45,7 +45,7 @@ export default function Navbar() {
 
         {onDashboard ? (
           <>
-            <div>
+            <div className="absolute left-1/2 -translate-x-1/2 top-[50px] sm:top-1/2 sm:-translate-y-1/2">
               <NavigationMenu>
                 <NavigationMenuList>
                   <SignedIn>
@@ -93,7 +93,7 @@ export default function Navbar() {
               </NavigationMenu>
             </div>
 
-            <div className="justify-self-end">
+            <div>
               <SignedIn>
                 <OrganizationSwitcher />
                 <UserButton />

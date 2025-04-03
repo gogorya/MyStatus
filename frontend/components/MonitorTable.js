@@ -57,9 +57,7 @@ export default function Page({ props }) {
                   <TableCell className="text-right">
                     <DropdownMenu model={false}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          +
-                        </Button>
+                        <Button variant="outline">&#8285;</Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>

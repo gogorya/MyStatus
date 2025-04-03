@@ -62,7 +62,6 @@ MyStatus is a web application for monitoring the status of various web services.
   MONGODB_URI=mongodb://localhost:27017/yourdbname
   CLERK_PUBLISHABLE_KEY=your-clerk-public-key
   CLERK_SECRET_KEY=your-clerk-api-key
-  NODE_ENV=development
   ```
 
 4. Run the development server:
@@ -114,11 +113,11 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## To do
 
-- Add dark mode toggle button, fix Clerk theming
+- Upgrade Next.js version and check for breaking changes
 - Socket connection for live updates
 - Checking for improvements in code architecture and database design
 - Finding and improving edge cases, response formatting, and other minor bugs
-- Improve UI responsiveness on mobile devices
+- Improve UI & responsiveness on mobile devices
 - Figure out proper indexing for database fields
 
 ## Known Issues
@@ -126,6 +125,7 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 - Dropdown menu for Editing remains open
 - Hover card does not work on mobile
 - Old data remains persistent on Monitor link change
+- Theme toggle is not working on Firefox mobile
 
 <!-- ### Explanation:
 

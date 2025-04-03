@@ -29,19 +29,17 @@ export default function Page({ props }) {
                   <div>
                     <Label>{incident.name}</Label>
                     <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {` -> ${incident.monitor.name}`}
+                      &nbsp;&#8594;&nbsp;{incident.monitor.name}
                     </span>
                   </div>
 
                   <div className="flex items-center">
                     {incident.statusHistory[0].status !== "Resolved" && (
-                      <div className="mt-[3px] w-2 h-2 rounded-md bg-green-400"></div>
+                      <div className="mr-3 w-2 h-2 rounded-md bg-green-400"></div>
                     )}
                     <DropdownMenu model={false}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          +
-                        </Button>
+                        <Button variant="outline">&#8285;</Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>

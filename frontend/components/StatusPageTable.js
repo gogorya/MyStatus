@@ -48,21 +48,21 @@ export default function Page({ props }) {
                     <Link
                       href={`/${row.slug}`}
                       target="_blank"
-                      className={
-                        row.active
-                          ? "hover:underline relative"
-                          : "pointer-events-none"
-                      }
+                      className={row.active ? undefined : "pointer-events-none"}
                     >
-                      {row.slug}
+                      <span
+                        className={row.active ? "hover:underline" : undefined}
+                      >
+                        {row.slug}
+                      </span>
                       <span
                         className={
                           row.active
-                            ? "text-gray-600 dark:text-gray-400 text-base absolute top-[-2px]"
+                            ? "text-gray-600 dark:text-gray-400 text-base ml-1"
                             : "hidden"
                         }
                       >
-                        &nbsp;&#8599;
+                        &#8599;
                       </span>
                     </Link>
                   </TableCell>
@@ -78,9 +78,7 @@ export default function Page({ props }) {
                   <TableCell className="text-right">
                     <DropdownMenu model={false}>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          +
-                        </Button>
+                        <Button variant="outline">&#8285;</Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
