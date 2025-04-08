@@ -17,8 +17,8 @@ import { useState, useEffect } from "react";
 import { useParams, notFound } from "next/navigation";
 
 // Library
-import { getDataPublicAction } from "../actions";
-import { getStatusPageData } from "@/lib/apiEndpoints";
+import { statusPagesPublicApiEndpoint } from "@/lib/apiEndpoints";
+import { fetchPublic } from "@/lib/utils";
 
 export default function Page() {
   const params = useParams();
@@ -33,7 +33,9 @@ export default function Page() {
       const slug = params["status-page-slug"];
 
       try {
-        const res = await getDataPublicAction(getStatusPageData, slug);
+        const res = await fetchPublic.get(
+          `${statusPagesPublicApiEndpoint}/${slug}`
+        );
 
         if (res && res.data) {
           const updatedData = res.data.statusPagePublic.map((monitor) => {

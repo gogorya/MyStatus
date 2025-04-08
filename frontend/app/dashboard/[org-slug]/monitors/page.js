@@ -23,17 +23,10 @@ import Form from "next/form";
 
 // Hooks
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
 
 // Library
-import {
-  getMonitors,
-  createMonitor,
-  updateMonitor,
-  deleteMonitor,
-} from "@/lib/apiEndpoints";
-import { checkLink } from "@/lib/utils";
-import { axiosPost, getDataAction } from "../../../actions";
+import { monitorsApiEndpoint } from "@/lib/apiEndpoints";
+import { fetchApi, checkLink } from "@/lib/utils";
 
 export default function Page() {
   // States
@@ -49,7 +42,7 @@ export default function Page() {
   // Fetch Monitors data when the component mounts
   useEffect(() => {
     const fetchMonitors = async () => {
-      const res = await getDataAction(getMonitors);
+      const res = await fetchApi.get(monitorsApiEndpoint);
       if (res && res.data) setMonitors(res.data.monitors);
     };
     fetchMonitors();
@@ -87,13 +80,9 @@ export default function Page() {
     }
   };
 
-  const { getToken } = useAuth();
-
   const handleDelete = async (_id) => {
     try {
-      const token = await getToken();
-      const data = { _id };
-      const res = await axiosPost(deleteMonitor, token, data);
+      const res = await fetchApi.delete(`${monitorsApiEndpoint}/${_id}`);
     } catch (error) {
       console.error(error);
     }
@@ -106,16 +95,11 @@ export default function Page() {
       link: monitor.link,
       active: monitor.active,
     };
-    if (monitor._id != null) {
-      data._id = monitor._id;
-    }
     try {
-      const token = await getToken();
-      const res = await axiosPost(
-        monitor._id == null ? createMonitor : updateMonitor,
-        token,
-        data
-      );
+      const res =
+        monitor._id == null
+          ? await fetchApi.post(monitorsApiEndpoint, data)
+          : await fetchApi.patch(`${monitorsApiEndpoint}/${monitor._id}`, data);
       if (monitor._id != null) {
         setMonitors((prevItems) =>
           prevItems.filter((item) => item._id !== monitor._id)

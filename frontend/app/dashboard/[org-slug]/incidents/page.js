@@ -32,17 +32,10 @@ import Form from "next/form";
 
 // Hooks
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
 
 // Library
-import {
-  getMonitors,
-  getIncidents,
-  createIncident,
-  updateIncident,
-  deleteIncident,
-} from "@/lib/apiEndpoints";
-import { axiosPost, getDataAction } from "../../../actions";
+import { monitorsApiEndpoint, incidentsApiEndpoint } from "@/lib/apiEndpoints";
+import { fetchApi } from "@/lib/utils";
 
 export default function Page() {
   // States
@@ -60,7 +53,7 @@ export default function Page() {
   // Fetch Incidents data when the component mounts
   useEffect(() => {
     const fetchIncidents = async () => {
-      const res = await getDataAction(getIncidents);
+      const res = await fetchApi.get(incidentsApiEndpoint);
       if (res && res.data) setIncidents(res.data.incidents);
     };
     fetchIncidents();
@@ -77,7 +70,7 @@ export default function Page() {
   // Handle button operations
   const handleCreate = async () => {
     try {
-      const res = await getDataAction(getMonitors);
+      const res = await fetchApi.get(monitorsApiEndpoint);
       if (res.data) {
         const activeMonitors = res.data.monitors.filter(
           (monitor) => monitor.active === true
@@ -107,13 +100,9 @@ export default function Page() {
     setStatusHistory(incident.statusHistory);
   };
 
-  const { getToken } = useAuth();
-
   const handleDelete = async (_id) => {
     try {
-      const token = await getToken();
-      const data = { _id };
-      const res = await axiosPost(deleteIncident, token, data);
+      const res = await fetchApi.delete(`${incidentsApiEndpoint}/${_id}`);
     } catch (error) {
       console.error(error);
     }
@@ -127,16 +116,14 @@ export default function Page() {
       status: incident.status,
       message: incident.message,
     };
-    if (incident._id != null) {
-      data._id = incident._id;
-    }
     try {
-      const token = await getToken();
-      const res = await axiosPost(
-        incident._id == null ? createIncident : updateIncident,
-        token,
-        data
-      );
+      const res =
+        incident._id == null
+          ? await fetchApi.post(incidentsApiEndpoint, data)
+          : await fetchApi.patch(
+              `${incidentsApiEndpoint}/${incident._id}`,
+              data
+            );
       if (incident._id != null) {
         setIncidents((prevItems) =>
           prevItems.filter((item) => item._id !== incident._id)

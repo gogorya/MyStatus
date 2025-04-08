@@ -29,7 +29,7 @@ app.get("/ping", (req, res) => {
 });
 
 // Public
-app.use("/public", statusPagePublicRoutes);
+app.use("/public/status-pages-public", statusPagePublicRoutes);
 
 // Private
 app.use(requireAuth());

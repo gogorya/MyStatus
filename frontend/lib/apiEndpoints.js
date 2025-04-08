@@ -1,46 +1,18 @@
 // Public
-const getStatusPageData = "/public/get-status-page-data";
+// Status-pages-public
+const statusPagesPublicApiEndpoint = "/public/status-pages-public";
 
 // Private
 // Monitors
-const monitors = "/api/monitors";
-// Get
-const getMonitors = `${monitors}/get`;
-// Post
-const createMonitor = `${monitors}/create`;
-const updateMonitor = `${monitors}/update`;
-const deleteMonitor = `${monitors}/delete`;
-
+const monitorsApiEndpoint = "/api/monitors";
 // Status-pages
-const statusPages = "/api/status-pages";
-// Get
-const getStatusPages = `${statusPages}/get`;
-// Post
-const createStatusPage = `${statusPages}/create`;
-const updateStatusPage = `${statusPages}/update`;
-const deleteStatusPage = `${statusPages}/delete`;
-
+const statusPagesApiEndpoint = "/api/status-pages";
 // Incidents
-const incidents = "/api/incidents";
-// Get
-const getIncidents = `${incidents}/get`;
-// Post
-const createIncident = `${incidents}/create`;
-const updateIncident = `${incidents}/update`;
-const deleteIncident = `${incidents}/delete`;
+const incidentsApiEndpoint = "/api/incidents";
 
 module.exports = {
-  getStatusPageData,
-  getMonitors,
-  createMonitor,
-  updateMonitor,
-  deleteMonitor,
-  getStatusPages,
-  createStatusPage,
-  updateStatusPage,
-  deleteStatusPage,
-  getIncidents,
-  createIncident,
-  updateIncident,
-  deleteIncident,
+  statusPagesPublicApiEndpoint,
+  monitorsApiEndpoint,
+  statusPagesApiEndpoint,
+  incidentsApiEndpoint,
 };

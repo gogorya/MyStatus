@@ -34,7 +34,8 @@ const createMonitor = async (req, res) => {
 const updateMonitor = async (req, res) => {
   try {
     const { orgId } = req.auth;
-    const data = { orgId, ...req.body.data };
+    const _id = req.params._id;
+    const data = { orgId, _id, ...req.body.data };
     const updatedMonitor = await monitorService.updateMonitor(data);
     res.status(201).json({
       data: {
@@ -52,7 +53,7 @@ const updateMonitor = async (req, res) => {
 const deleteMonitor = async (req, res) => {
   try {
     const { orgId } = req.auth;
-    const { _id } = req.body.data;
+    const _id = req.params._id;
     const data = { orgId, _id };
     const deletedMonitor = await monitorService.deleteMonitor(data);
     res.status(201).json({

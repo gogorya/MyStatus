@@ -26,18 +26,13 @@ import Form from "next/form";
 
 // Hooks
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
 
 // Library
 import {
-  getMonitors,
-  getStatusPages,
-  createStatusPage,
-  updateStatusPage,
-  deleteStatusPage,
+  monitorsApiEndpoint,
+  statusPagesApiEndpoint,
 } from "@/lib/apiEndpoints";
-import { generateSlug } from "@/lib/utils";
-import { axiosPost, getDataAction } from "../../../actions";
+import { fetchApi, generateSlug } from "@/lib/utils";
 
 export default function Page() {
   // States
@@ -53,7 +48,7 @@ export default function Page() {
   // Fetch Status Pages data when the component mounts
   useEffect(() => {
     const fetchStatusPages = async () => {
-      const res = await getDataAction(getStatusPages);
+      const res = await fetchApi.get(statusPagesApiEndpoint);
       if (res && res.data) setStatusPages(res.data.statusPages);
     };
     fetchStatusPages();
@@ -74,7 +69,7 @@ export default function Page() {
   // Handle button operations
   const handleCreate = async () => {
     try {
-      const res = await getDataAction(getMonitors);
+      const res = await fetchApi.get(monitorsApiEndpoint);
       if (res.data) {
         const monitorsWithBoolean = res.data.monitors.map((monitor) => ({
           ...monitor,
@@ -98,7 +93,7 @@ export default function Page() {
       (statusPage) => statusPage._id === _id
     );
     try {
-      const res = await getDataAction(getMonitors);
+      const res = await fetchApi.get(monitorsApiEndpoint);
       if (res.data) {
         const monitorsWithBoolean = res.data.monitors.map((monitor) => ({
           ...monitor,
@@ -119,13 +114,9 @@ export default function Page() {
     }
   };
 
-  const { getToken } = useAuth();
-
   const handleDelete = async (_id) => {
     try {
-      const token = await getToken();
-      const data = { _id };
-      const res = await axiosPost(deleteStatusPage, token, data);
+      const res = await fetchApi.delete(`${statusPagesApiEndpoint}/${_id}`);
     } catch (error) {
       console.error(error);
     }
@@ -142,17 +133,17 @@ export default function Page() {
         .map(({ name, link, active, selected, ...rest }) => rest),
     };
     if (statusPage._id != null) {
-      data._id = statusPage._id;
       delete data.name;
       delete data.slug;
     }
     try {
-      const token = await getToken();
-      const res = await axiosPost(
-        statusPage._id == null ? createStatusPage : updateStatusPage,
-        token,
-        data
-      );
+      const res =
+        statusPage._id == null
+          ? await fetchApi.post(statusPagesApiEndpoint, data)
+          : await fetchApi.patch(
+              `${statusPagesApiEndpoint}/${statusPage._id}`,
+              data
+            );
       if (res && res.data) {
         if (statusPage._id != null) {
           setStatusPages((prevItems) =>

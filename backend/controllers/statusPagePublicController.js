@@ -2,7 +2,7 @@ const statusPagePublicService = require("../services/statusPagePublicService");
 
 const getStatusPagePublic = async (req, res) => {
   try {
-    const { slug } = req.body.data;
+    const slug = req.params.slug;
     const statusPagePublic = await statusPagePublicService.getStatusPagePublic(
       slug
     );

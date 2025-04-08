@@ -41,7 +41,8 @@ const createStatusPage = async (req, res) => {
 const updateStatusPage = async (req, res) => {
   try {
     const { orgId } = req.auth;
-    const data = { orgId, ...req.body.data };
+    const _id = req.params._id;
+    const data = { orgId, _id, ...req.body.data };
     const updatedStatusPage = await statusPageService.updateStatusPage(data);
     res.status(201).json({
       data: {
@@ -59,7 +60,7 @@ const updateStatusPage = async (req, res) => {
 const deleteStatusPage = async (req, res) => {
   try {
     const { orgId } = req.auth;
-    const { _id } = req.body.data;
+    const _id = req.params._id;
     const data = { orgId, _id };
     const deletedStatusPage = await statusPageService.deleteStatusPage(data);
     res.status(201).json({

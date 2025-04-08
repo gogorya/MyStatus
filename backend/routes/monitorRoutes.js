@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const monitorController = require("../controllers/monitorController");
 
-router.get("/get", monitorController.getMonitors);
-router.post("/create", monitorController.createMonitor);
-router.post("/update", monitorController.updateMonitor);
-router.post("/delete", monitorController.deleteMonitor);
+router.get("", monitorController.getMonitors);
+router.post("", monitorController.createMonitor);
+router.patch("/:_id", monitorController.updateMonitor);
+router.delete("/:_id", monitorController.deleteMonitor);
 
 module.exports = router;

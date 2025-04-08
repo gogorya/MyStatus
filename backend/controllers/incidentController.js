@@ -34,7 +34,8 @@ const createIncident = async (req, res) => {
 const updateIncident = async (req, res) => {
   try {
     const { orgId } = req.auth;
-    const data = { orgId, ...req.body.data };
+    const _id = req.params._id;
+    const data = { orgId, _id, ...req.body.data };
     const updatedIncident = await incidentService.updateIncident(data);
     res.status(201).json({
       data: {
@@ -52,7 +53,7 @@ const updateIncident = async (req, res) => {
 const deleteIncident = async (req, res) => {
   try {
     const { orgId } = req.auth;
-    const { _id } = req.body.data;
+    const _id = req.params._id;
     const data = { orgId, _id };
     const deletedIncident = await incidentService.deleteIncident(data);
     res.status(201).json({
