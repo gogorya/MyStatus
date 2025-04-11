@@ -1,7 +1,7 @@
 // Library
 import { formatDate } from "@/lib/utils";
 
-export default function Page({ props }) {
+export default function IncidentStatusList({ props }) {
   return (
     <div className="space-y-2">
       {props.statusHistory.map((status, index) => {

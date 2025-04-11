@@ -18,7 +18,7 @@ import {
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export default function Page({ props }) {
+export default function MonitorTable({ props }) {
   return (
     <div className="border rounded-lg w-full">
       {props.rows.length ? (
@@ -42,15 +42,21 @@ export default function Page({ props }) {
                   {Object.entries(row).map(([key, value], cindex) => {
                     if (key === "_id") return null;
                     return (
-                      <TableCell
-                        key={cindex}
-                        className={
-                          Object.values(row).length - 1 === cindex
-                            ? "text-right"
-                            : ""
-                        }
-                      >
-                        {key !== "active" ? value : value ? "Yes" : "No"}
+                      <TableCell key={cindex}>
+                        {key !== "active" ? (
+                          value
+                        ) : (
+                          <div className="flex items-center justify-end">
+                            {value ? (
+                              <>
+                                <div className="mr-3 w-2 h-2 rounded-md bg-green-400"></div>
+                                <span>Yes</span>
+                              </>
+                            ) : (
+                              <span>No</span>
+                            )}
+                          </div>
+                        )}
                       </TableCell>
                     );
                   })}

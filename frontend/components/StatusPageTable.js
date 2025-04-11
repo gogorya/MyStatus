@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 // Next.js utilities
 import Link from "next/link";
 
-export default function Page({ props }) {
+export default function StatusPageTable({ props }) {
   return (
     <div className="border rounded-lg w-full">
       {props.rows.length ? (
@@ -71,8 +71,17 @@ export default function Page({ props }) {
                     {row.monitors.map((monitor) => monitor.name).join(", ")}
                   </TableCell>
 
-                  <TableCell className="text-right">
-                    {row.active ? "Yes" : "No"}
+                  <TableCell>
+                    <div className="flex items-center justify-end">
+                      {row.active ? (
+                        <>
+                          <div className="mr-3 w-2 h-2 rounded-md bg-green-400"></div>
+                          <span>Yes</span>
+                        </>
+                      ) : (
+                        <span>No</span>
+                      )}
+                    </div>
                   </TableCell>
 
                   <TableCell className="text-right">

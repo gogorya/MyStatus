@@ -14,7 +14,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-export default function Page({ props }) {
+// Clerk utilities
+import { SignedIn } from "@clerk/nextjs";
+
+export default function IncidentList({ props }) {
   return (
     <div className="w-full">
       {props.incidents.length ? (
@@ -37,43 +40,47 @@ export default function Page({ props }) {
                     {incident.statusHistory[0].status !== "Resolved" && (
                       <div className="mr-3 w-2 h-2 rounded-md bg-green-400"></div>
                     )}
-                    <DropdownMenu model={false}>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline">&#8285;</Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            {incident.statusHistory[0].status !==
-                              "Resolved" && (
-                              <DropdownMenuItem
-                                onSelect={(e) => {
-                                  e.preventDefault();
-                                  props.handleEdit(incident);
-                                }}
-                              >
-                                Edit
-                              </DropdownMenuItem>
-                            )}
-                          </DialogTrigger>
-                          {props.dialogContent}
-                        </Dialog>
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <DropdownMenuItem
-                              onSelect={(e) => {
-                                e.preventDefault();
-                                props.handleDelete(incident._id);
-                              }}
-                            >
-                              Delete
-                            </DropdownMenuItem>
-                          </DialogTrigger>
-                        </Dialog>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <SignedIn>
+                      {props.dialogContent && (
+                        <DropdownMenu model={false}>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline">&#8285;</Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                {incident.statusHistory[0].status !==
+                                  "Resolved" && (
+                                  <DropdownMenuItem
+                                    onSelect={(e) => {
+                                      e.preventDefault();
+                                      props.handleEdit(incident);
+                                    }}
+                                  >
+                                    Edit
+                                  </DropdownMenuItem>
+                                )}
+                              </DialogTrigger>
+                              {props.dialogContent}
+                            </Dialog>
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <DropdownMenuItem
+                                  onSelect={(e) => {
+                                    e.preventDefault();
+                                    props.handleDelete(incident._id);
+                                  }}
+                                >
+                                  Delete
+                                </DropdownMenuItem>
+                              </DialogTrigger>
+                            </Dialog>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
+                    </SignedIn>
                   </div>
                 </div>
 

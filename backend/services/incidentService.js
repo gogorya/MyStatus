@@ -13,6 +13,19 @@ const formatResponse = (obj) => {
   return obj;
 };
 
+const getIncident = async (id) => {
+  try {
+    const incident = await Incident.findById(id)
+      .populate("monitorId", "name")
+      .lean();
+    formatResponse(incident);
+
+    return incident;
+  } catch (error) {
+    throw new Error("Failed to get incident: " + error.message);
+  }
+};
+
 const getIncidents = async (orgId) => {
   try {
     const incidents = await Incident.find({ orgId: orgId })
@@ -111,6 +124,7 @@ const deleteIncident = async (data) => {
 };
 
 module.exports = {
+  getIncident,
   getIncidents,
   createIncident,
   updateIncident,

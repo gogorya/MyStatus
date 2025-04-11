@@ -252,7 +252,7 @@ export default function Page() {
     columns: [
       { name: "Name", class: "w-40" },
       { name: "Slug", class: "w-40" },
-      { name: "Monitors", class: "" },
+      { name: "Monitors", class: "w-80" },
       { name: "Active", class: "text-right" },
     ],
     rows: statusPages,
