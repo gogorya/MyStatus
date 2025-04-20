@@ -4,15 +4,9 @@ const StatusPage = require("../models/StatusPage.js");
 
 const getStatusPages = async (orgId) => {
   try {
-    const statusPageIds = await organizationService.getStatusPages(orgId);
-    const statusPages = await StatusPage.find({
-      _id: { $in: statusPageIds },
-    })
-      .select("-orgId -__v")
-      .populate({
-        path: "monitors",
-        select: "name",
-      });
+    const statusPages = await StatusPage.find({ orgId: orgId }).populate(
+      "monitors"
+    );
     return statusPages;
   } catch (error) {
     throw new Error("Failed to get status pages: " + error.message);
@@ -34,15 +28,9 @@ const createStatusPage = async (data) => {
 
     const newStatusPage = new StatusPage(data);
     await newStatusPage.save();
-    await organizationService.addStatusPage(data.orgId, newStatusPage._id);
-    const savedStatusPage = await StatusPage.findById(newStatusPage._id)
-      .select("-orgId -__v")
-      .populate({
-        path: "monitors",
-        select: "name",
-      });
+    await newStatusPage.populate("monitors");
 
-    return savedStatusPage;
+    return newStatusPage;
   } catch (error) {
     if (error.message === "Slug already exists") {
       throw new Error(error.message);
@@ -64,14 +52,9 @@ const updateStatusPage = async (data) => {
 
     Object.assign(statusPageToUpdate, data);
     await statusPageToUpdate.save();
-    const updatedStatusPage = await StatusPage.findById(data._id)
-      .select("-orgId -__v")
-      .populate({
-        path: "monitors",
-        select: "name",
-      });
+    await statusPageToUpdate.populate("monitors");
 
-    return updatedStatusPage;
+    return statusPageToUpdate;
   } catch (error) {
     throw new Error("Failed to update status page: " + error.message);
   }
@@ -87,10 +70,11 @@ const deleteStatusPage = async (data) => {
       throw new Error("Unauthorized");
     }
 
-    await organizationService.deleteStatusPage(data.orgId, data._id);
-    await StatusPage.findByIdAndDelete(data._id);
+    const deletedStatusPage = await StatusPage.findByIdAndDelete(
+      data._id
+    ).populate("monitors");
 
-    return statusPageToDelete;
+    return deletedStatusPage;
   } catch (error) {
     throw new Error("Failed to delete status page: " + error.message);
   }

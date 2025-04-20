@@ -3,6 +3,7 @@ const incidentService = require("./incidentService.js");
 const StatusPage = require("../models/StatusPage.js");
 const Monitor = require("../models/Monitor.js");
 const ActiveMonitorData = require("../models/ActiveMonitorData.js");
+const Incident = require("../models/Incident.js");
 
 const getStatusPagePublic = async (slug) => {
   try {
@@ -11,46 +12,24 @@ const getStatusPagePublic = async (slug) => {
       throw new Error("Status page not found");
     }
 
-    const monitorsData = [];
-    const incidentsData = [];
+    const monitors = await Monitor.find({
+      _id: statusPage.monitors,
+      active: true,
+    });
 
-    for (const monitorId of statusPage.monitors) {
-      try {
-        const monitor = await Monitor.findById(monitorId);
-        if (monitor.active) {
-          // Monitor data
-          const monitorDataDocs = await ActiveMonitorData.find({
-            monitorId: monitorId,
-          }).limit(30);
-          const monitorData = monitorDataDocs.flatMap((doc) => doc.data);
-          monitorsData.push({
-            id: monitorId,
-            name: monitor.name,
-            data: monitorData,
-          });
+    const monitorsData = await ActiveMonitorData.find(
+      {
+        monitor: monitors,
+      },
+      { data: { $slice: -30 } }
+    ).populate("monitor");
 
-          // Incident data
-          const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
-          for (const incidentId of monitor.incidents) {
-            if (
-              Date.now() - incidentId.getTimestamp().getTime() <=
-              THIRTY_DAYS_MS
-            ) {
-              const incident = await incidentService.getIncident(incidentId);
-              incidentsData.push(incident);
-            }
-          }
-        }
-      } catch (error) {
-        console.error(
-          `Failed to fetch data for monitor ID ${monitorId}: ${error.message}`
-        );
-      }
-    }
-
-    incidentsData.sort((a, b) =>
-      a._id.getTimestamp() < b._id.getTimestamp() ? 1 : -1
-    );
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const incidentsData = await Incident.find({
+      monitor: monitors,
+      createdAt: { $gte: thirtyDaysAgo },
+    }).populate("monitor");
+    incidentsData.reverse();
 
     return { monitorsData, incidentsData };
   } catch (error) {

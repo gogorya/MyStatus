@@ -102,10 +102,13 @@ export default function Page() {
           : await fetchApi.patch(`${monitorsApiEndpoint}/${monitor._id}`, data);
       if (monitor._id != null) {
         setMonitors((prevItems) =>
-          prevItems.filter((item) => item._id !== monitor._id)
+          prevItems.map((item) =>
+            item._id === monitor._id ? { ...res.data.monitor } : item
+          )
         );
+      } else {
+        setMonitors((prevItems) => [...prevItems, res.data.monitor]);
       }
-      setMonitors((prevItems) => [...prevItems, res.data.monitor]);
     } catch (error) {
       console.error(error);
     }

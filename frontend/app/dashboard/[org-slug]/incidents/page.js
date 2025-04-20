@@ -41,7 +41,10 @@ export default function Page() {
   // States
   const [incident, setIncident] = useState({
     name: "",
-    monitorId: "",
+    monitor: {
+      _id: "",
+      name: "",
+    },
     status: "",
     message: "",
     _id: null,
@@ -77,7 +80,10 @@ export default function Page() {
         );
         setIncident({
           name: "",
-          monitorId: "",
+          monitor: {
+            _id: "",
+            name: "",
+          },
           status: "",
           message: "",
           _id: null,
@@ -92,7 +98,7 @@ export default function Page() {
   const handleEdit = (incident) => {
     setIncident({
       name: incident.name,
-      monitorId: incident.monitor._id,
+      monitor: { _id: incident.monitor._id, name: incident.monitor.name },
       status: "",
       message: "",
       _id: incident._id,
@@ -112,7 +118,7 @@ export default function Page() {
   const handleSave = async () => {
     const data = {
       name: incident.name,
-      monitorId: incident.monitorId,
+      monitor: incident.monitor._id,
       status: incident.status,
       message: incident.message,
     };
@@ -126,10 +132,13 @@ export default function Page() {
             );
       if (incident._id != null) {
         setIncidents((prevItems) =>
-          prevItems.filter((item) => item._id !== incident._id)
+          prevItems.map((item) =>
+            item._id === incident._id ? { ...res.data.incident } : item
+          )
         );
+      } else {
+        setIncidents((prevItems) => [res.data.incident, ...prevItems]);
       }
-      setIncidents((prevItems) => [res.data.incident, ...prevItems]);
     } catch (error) {
       console.error(error);
     }
@@ -166,13 +175,19 @@ export default function Page() {
             <Select
               disabled={incident._id != null}
               onValueChange={(value) => {
-                setIncident({ ...incident, monitorId: value });
+                setIncident({
+                  ...incident,
+                  monitor: {
+                    _id: JSON.parse(value)._id,
+                    name: JSON.parse(value).name,
+                  },
+                });
               }}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue
                   placeholder={
-                    incident._id == null ? "Monitors" : incident.monitorId
+                    incident._id == null ? "Monitors" : incident.monitor.name
                   }
                 />
               </SelectTrigger>
@@ -181,7 +196,7 @@ export default function Page() {
                   return (
                     <SelectItem
                       key={monitor._id}
-                      value={monitor._id.toString()}
+                      value={JSON.stringify(monitor)}
                     >
                       {monitor.name}
                     </SelectItem>

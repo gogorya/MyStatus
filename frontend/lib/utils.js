@@ -26,7 +26,7 @@ export const formatDate = (utcDate) => {
   const dateString = new Date(utcDate.toString()).toLocaleString();
   const [date, time, mi] = dateString.split(" ");
   const [hour, minute] = time.split(":");
-  return `${date} ${mi == "pm" ? parseInt(hour) + 12 : hour}:${minute}`;
+  return `${date} ${hour}:${minute} ${mi === undefined ? "" : mi}`;
 };
 
 export const fetchPublic = {

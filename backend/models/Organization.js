@@ -7,18 +7,6 @@ const organizationSchema = new mongoose.Schema({
     unique: true,
     immutable: true,
   },
-  monitors: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Monitor",
-    },
-  ],
-  statusPages: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "StatusPage",
-    },
-  ],
 });
 
 const Organization = mongoose.model("Organization", organizationSchema);

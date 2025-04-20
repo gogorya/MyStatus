@@ -30,6 +30,14 @@ const statusPageSchema = new mongoose.Schema({
   },
 });
 
+statusPageSchema.set("toJSON", {
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret.orgId;
+    return ret;
+  },
+});
+
 const StatusPage = mongoose.model("StatusPage", statusPageSchema);
 
 module.exports = StatusPage;

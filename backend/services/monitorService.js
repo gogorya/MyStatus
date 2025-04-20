@@ -7,10 +7,9 @@ const Incident = require("../models/Incident.js");
 
 const getMonitors = async (orgId) => {
   try {
-    const monitorIds = await organizationService.getMonitors(orgId);
     const monitors = await Monitor.find({
-      _id: { $in: monitorIds },
-    }).select("-orgId -__v -incidents");
+      orgId: orgId,
+    });
     return monitors;
   } catch (error) {
     throw new Error("Failed to get monitors: " + error.message);
@@ -28,10 +27,6 @@ const createMonitor = async (data) => {
 
     const newMonitor = new Monitor(data);
     await newMonitor.save();
-    await organizationService.addMonitor(data.orgId, newMonitor._id);
-    const savedMonitor = await Monitor.findById(newMonitor._id).select(
-      "-orgId -__v -incidents"
-    );
 
     // If Active, add to ActiveMonitor
     if (newMonitor.active) {
@@ -46,7 +41,7 @@ const createMonitor = async (data) => {
       }
     }
 
-    return savedMonitor;
+    return newMonitor;
   } catch (error) {
     throw new Error("Failed to create monitor: " + error.message);
   }
@@ -64,40 +59,36 @@ const updateMonitor = async (data) => {
     const oldLink = monitorToUpdate.link;
     Object.assign(monitorToUpdate, data);
     await monitorToUpdate.save();
-    const updatedMonitor = await Monitor.findById(data._id).select(
-      "-orgId -__v -incidents"
-    );
 
-    const holdUpdatedMonitor = await Monitor.findById(data._id);
     const activeMonitorExists = await activeMonitorService.activeMonitorExists(
-      holdUpdatedMonitor._id
+      monitorToUpdate._id
     );
 
     try {
-      if (!activeMonitorExists && holdUpdatedMonitor.active) {
+      if (!activeMonitorExists && monitorToUpdate.active) {
         // If Active, add to ActiveMonitor
         await activeMonitorService.createActiveMonitor({
-          orgId: holdUpdatedMonitor.orgId,
-          monitorId: holdUpdatedMonitor._id,
-          link: holdUpdatedMonitor.link,
+          orgId: monitorToUpdate.orgId,
+          monitorId: monitorToUpdate._id,
+          link: monitorToUpdate.link,
         });
-      } else if (activeMonitorExists && !holdUpdatedMonitor.active) {
+      } else if (activeMonitorExists && !monitorToUpdate.active) {
         // If not Active, delete from ActiveMonitor
         await activeMonitorService.deleteActiveMonitor({
-          monitorId: holdUpdatedMonitor._id,
-          orgId: holdUpdatedMonitor.orgId,
+          monitorId: monitorToUpdate._id,
+          orgId: monitorToUpdate.orgId,
         });
-      } else if (activeMonitorExists && holdUpdatedMonitor.active) {
+      } else if (activeMonitorExists && monitorToUpdate.active) {
         // Update link, delete and insert
-        if (oldLink != holdUpdatedMonitor.link) {
+        if (oldLink != monitorToUpdate.link) {
           await activeMonitorService.deleteActiveMonitor({
-            monitorId: holdUpdatedMonitor._id,
-            orgId: holdUpdatedMonitor.orgId,
+            monitorId: monitorToUpdate._id,
+            orgId: monitorToUpdate.orgId,
           });
           await activeMonitorService.createActiveMonitor({
-            orgId: holdUpdatedMonitor.orgId,
-            monitorId: holdUpdatedMonitor._id,
-            link: holdUpdatedMonitor.link,
+            orgId: monitorToUpdate.orgId,
+            monitorId: monitorToUpdate._id,
+            link: monitorToUpdate.link,
           });
         }
       } else {
@@ -107,7 +98,7 @@ const updateMonitor = async (data) => {
       throw new Error("Failed to update active monitor: " + error.message);
     }
 
-    return updatedMonitor;
+    return monitorToUpdate;
   } catch (error) {
     throw new Error("Failed to update monitor: " + error.message);
   }
@@ -127,7 +118,6 @@ const deleteMonitor = async (data) => {
       { orgId: data.orgId },
       { $pull: { monitors: data._id } }
     );
-    await organizationService.deleteMonitor(data.orgId, data._id);
     await Monitor.findByIdAndDelete(data._id);
 
     // If in ActiveMonitor, delete ActiveMonitor
@@ -146,12 +136,10 @@ const deleteMonitor = async (data) => {
     }
 
     // If incidents, delete incidents
-    if (monitorToDelete.incidents.length) {
-      try {
-        await Incident.deleteMany({ _id: { $in: monitorToDelete.incidents } });
-      } catch (error) {
-        throw new Error("Failed to delete incidents: " + error.message);
-      }
+    try {
+      await Incident.deleteMany({ monitor: monitorToDelete._id });
+    } catch (error) {
+      throw new Error("Failed to delete incidents: " + error.message);
     }
 
     return monitorToDelete;
@@ -160,46 +148,9 @@ const deleteMonitor = async (data) => {
   }
 };
 
-const addIncident = async (monitorId, incidentId) => {
-  try {
-    const updatedMonitor = await Monitor.findByIdAndUpdate(
-      monitorId,
-      {
-        $addToSet: { incidents: incidentId },
-      },
-      { new: true }
-    );
-
-    if (!updatedMonitor) {
-      throw new Error("Monitor not found");
-    }
-
-    return updatedMonitor;
-  } catch (error) {
-    throw new Error("Failed to add incident: " + error.message);
-  }
-};
-
-async function deleteIncident(monitorId, incidentId) {
-  try {
-    const monitor = await Monitor.findById(monitorId);
-    if (!monitor) {
-      throw new Error("Monitor not found");
-    }
-
-    monitor.incidents.pull(incidentId);
-
-    await monitor.save();
-  } catch (error) {
-    throw new Error("Failed to delete incident: " + error.message);
-  }
-}
-
 module.exports = {
   getMonitors,
   createMonitor,
   updateMonitor,
   deleteMonitor,
-  addIncident,
-  deleteIncident,
 };

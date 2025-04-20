@@ -147,10 +147,13 @@ export default function Page() {
       if (res && res.data) {
         if (statusPage._id != null) {
           setStatusPages((prevItems) =>
-            prevItems.filter((item) => item._id !== statusPage._id)
+            prevItems.map((item) =>
+              item._id === statusPage._id ? { ...res.data.statusPage } : item
+            )
           );
+        } else {
+          setStatusPages((prevItems) => [...prevItems, res.data.statusPage]);
         }
-        setStatusPages((prevItems) => [...prevItems, res.data.statusPage]);
       } else if (res && res.error === "Slug already exists") {
         toast("Slug for the page already exists", {
           description: "Please create with a new one",

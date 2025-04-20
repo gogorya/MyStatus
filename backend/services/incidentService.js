@@ -1,40 +1,8 @@
-const monitorService = require("../services/monitorService.js");
-
 const Incident = require("../models/Incident.js");
-
-const formatResponse = (obj) => {
-  delete obj.orgId;
-  delete obj.__v;
-
-  obj.monitor = { _id: obj.monitorId._id, name: obj.monitorId.name };
-  delete obj.monitorId;
-
-  obj.statusHistory.reverse();
-  return obj;
-};
-
-const getIncident = async (id) => {
-  try {
-    const incident = await Incident.findById(id)
-      .populate("monitorId", "name")
-      .lean();
-    formatResponse(incident);
-
-    return incident;
-  } catch (error) {
-    throw new Error("Failed to get incident: " + error.message);
-  }
-};
 
 const getIncidents = async (orgId) => {
   try {
-    const incidents = await Incident.find({ orgId: orgId })
-      .populate("monitorId", "name")
-      .lean();
-    for (let i of incidents) {
-      formatResponse(i);
-    }
-
+    const incidents = await Incident.find({ orgId: orgId }).populate("monitor");
     return incidents.reverse();
   } catch (error) {
     throw new Error("Failed to get incidents: " + error.message);
@@ -48,15 +16,11 @@ const createIncident = async (data) => {
       status: data.status,
       message: data.message,
     });
+
     await newIncident.save();
-    await monitorService.addIncident(data.monitorId, newIncident._id);
+    await newIncident.populate("monitor");
 
-    const savedIncident = await Incident.findById(newIncident._id)
-      .populate("monitorId", "name")
-      .lean();
-    formatResponse(savedIncident);
-
-    return savedIncident;
+    return newIncident;
   } catch (error) {
     throw new Error("Failed to create incident: " + error.message);
   }
@@ -67,7 +31,7 @@ const updateIncident = async (data) => {
     const incidentToUpdate = await Incident.findById(data._id);
     if (
       incidentToUpdate.orgId.toString() !== data.orgId.toString() ||
-      incidentToUpdate.monitorId.toString() !== data.monitorId.toString()
+      incidentToUpdate.monitor.toString() !== data.monitor.toString()
     ) {
       throw new Error("Unauthorized");
     }
@@ -90,12 +54,9 @@ const updateIncident = async (data) => {
       throw new Error("Cannot update a resolved incident");
     }
 
-    const updatedIncident = await Incident.findById(incidentToUpdate._id)
-      .populate("monitorId", "name")
-      .lean();
-    formatResponse(updatedIncident);
+    await incidentToUpdate.populate("monitor");
 
-    return updatedIncident;
+    return incidentToUpdate;
   } catch (error) {
     throw new Error("Failed to update incident: " + error.message);
   }
@@ -108,14 +69,9 @@ const deleteIncident = async (data) => {
       throw new Error("Unauthorized");
     }
 
-    await monitorService.deleteIncident(
-      incidentToDelete.monitorId,
-      incidentToDelete._id
+    const deletedIncident = await Incident.findByIdAndDelete(data._id).populate(
+      "monitor"
     );
-    const deletedIncident = await Incident.findByIdAndDelete(data._id)
-      .populate("monitorId", "name")
-      .lean();
-    formatResponse(deletedIncident);
 
     return deletedIncident;
   } catch (error) {
@@ -124,7 +80,6 @@ const deleteIncident = async (data) => {
 };
 
 module.exports = {
-  getIncident,
   getIncidents,
   createIncident,
   updateIncident,

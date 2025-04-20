@@ -12,11 +12,11 @@ const agenda = new Agenda({
 });
 
 const savePingData = async (monitorId, orgId, success) => {
-  let monitorData = await ActiveMonitorData.findOne({ monitorId: monitorId });
+  let monitorData = await ActiveMonitorData.findOne({ monitor: monitorId });
   const currentDate = new Date().toISOString().split("T")[0];
   if (!monitorData) {
     monitorData = new ActiveMonitorData({
-      monitorId: monitorId,
+      monitor: monitorId,
       orgId: orgId,
       data: [],
     });

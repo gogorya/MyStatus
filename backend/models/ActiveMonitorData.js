@@ -6,7 +6,7 @@ const activeMonitorDataSchema = new mongoose.Schema({
     required: true,
     immutable: true,
   },
-  monitorId: {
+  monitor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Monitor",
     required: true,
@@ -31,6 +31,14 @@ const activeMonitorDataSchema = new mongoose.Schema({
       },
     },
   ],
+});
+
+activeMonitorDataSchema.set("toJSON", {
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret.orgId;
+    return ret;
+  },
 });
 
 const ActiveMonitorData = mongoose.model(

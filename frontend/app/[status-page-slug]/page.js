@@ -101,11 +101,13 @@ export default function Page() {
 
             {monitorsData.map((monitorData) => (
               <div
-                key={monitorData.id}
+                key={monitorData._id}
                 className="border border-gray-300 dark:border-gray-700 rounded-lg p-2 space-y-2"
               >
                 <div className="flex justify-between items-center">
-                  <Label className="text-base">{monitorData.name}</Label>
+                  <Label className="text-base">
+                    {monitorData.monitor.name}
+                  </Label>
                   <div className="text-base">
                     <span>{monitorData.uptime}</span>
                     <span className="font-light">%</span>

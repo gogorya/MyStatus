@@ -21,13 +21,12 @@ const incidentSchema = new mongoose.Schema({
     type: String,
     required: true,
     immutable: true,
-    index: true,
   },
   name: {
     type: String,
     required: true,
   },
-  monitorId: {
+  monitor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Monitor",
     required: true,
@@ -36,6 +35,10 @@ const incidentSchema = new mongoose.Schema({
   statusHistory: {
     type: [statusSchema],
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
@@ -52,6 +55,15 @@ incidentSchema.pre("save", function (next) {
     }
   }
   next();
+});
+
+incidentSchema.set("toJSON", {
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret.orgId;
+    ret.statusHistory.reverse();
+    return ret;
+  },
 });
 
 const Incident = mongoose.model("Incident", incidentSchema);

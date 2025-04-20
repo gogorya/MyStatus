@@ -27,12 +27,14 @@ const monitorSchema = new mongoose.Schema({
     default: true,
     required: true,
   },
-  incidents: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Incident",
-    },
-  ],
+});
+
+monitorSchema.set("toJSON", {
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret.orgId;
+    return ret;
+  },
 });
 
 const Monitor = mongoose.model("Monitor", monitorSchema);
