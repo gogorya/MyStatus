@@ -1,5 +1,3 @@
-const organizationService = require("./organizationService.js");
-
 const StatusPage = require("../models/StatusPage.js");
 
 const getStatusPages = async (orgId) => {
@@ -15,16 +13,11 @@ const getStatusPages = async (orgId) => {
 
 const createStatusPage = async (data) => {
   try {
-    const organizationExists = await organizationService.organizationExists(
-      data.orgId
-    );
-    if (!organizationExists) {
-      await organizationService.createOrganization(data.orgId);
-    }
     const slugExists = await StatusPage.find({ slug: data.slug });
     if (slugExists.length !== 0) {
       throw new Error("Slug already exists");
     }
+    data.monitors = [...new Set(data.monitors)];
 
     const newStatusPage = new StatusPage(data);
     await newStatusPage.save();
@@ -49,6 +42,7 @@ const updateStatusPage = async (data) => {
     ) {
       throw new Error("Unauthorized");
     }
+    data.monitors = [...new Set(data.monitors)];
 
     Object.assign(statusPageToUpdate, data);
     await statusPageToUpdate.save();

@@ -1,3 +1,6 @@
+// Components
+import DeleteConfirmation from "@/components/DeleteConfirmation";
+
 // UI components
 import {
   Table,
@@ -110,12 +113,18 @@ export default function StatusPageTable({ props }) {
                             <DropdownMenuItem
                               onSelect={(e) => {
                                 e.preventDefault();
-                                props.handleDelete(row._id);
                               }}
                             >
                               Delete
                             </DropdownMenuItem>
                           </DialogTrigger>
+                          <DeleteConfirmation
+                            props={{
+                              handleDelete: props.handleDelete,
+                              _id: row._id,
+                              item: `Status Page: ${row.name}`,
+                            }}
+                          />
                         </Dialog>
                       </DropdownMenuContent>
                     </DropdownMenu>

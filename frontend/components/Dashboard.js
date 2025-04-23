@@ -24,20 +24,19 @@ export default function Dashboard({ props, children }) {
           </CardDescription>
         </div>
         <SignedIn>
-          <div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  onClick={props.handleCreate}
-                  className={props.buttonClass}
-                >
-                  Create
-                </Button>
-              </DialogTrigger>
-              {props.dialogContent}
-            </Dialog>
-          </div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                onClick={props.handleCreate}
+                className={props.buttonClass}
+              >
+                Create
+              </Button>
+            </DialogTrigger>
+            {props.dialogContent}
+          </Dialog>
         </SignedIn>
+        {props.refreshButton}
       </CardHeader>
 
       <Separator />

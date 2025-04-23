@@ -31,6 +31,10 @@ const activeMonitorDataSchema = new mongoose.Schema({
       },
     },
   ],
+  lastThreeRequests: {
+    type: [Boolean],
+    default: [false, false, false],
+  },
 });
 
 activeMonitorDataSchema.set("toJSON", {

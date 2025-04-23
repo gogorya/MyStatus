@@ -1,5 +1,6 @@
 // Components
 import IncidentStatusList from "@/components/IncidentStatusList";
+import DeleteConfirmation from "@/components/DeleteConfirmation";
 
 // UI components
 import {
@@ -70,12 +71,18 @@ export default function IncidentList({ props }) {
                                 <DropdownMenuItem
                                   onSelect={(e) => {
                                     e.preventDefault();
-                                    props.handleDelete(incident._id);
                                   }}
                                 >
                                   Delete
                                 </DropdownMenuItem>
                               </DialogTrigger>
+                              <DeleteConfirmation
+                                props={{
+                                  handleDelete: props.handleDelete,
+                                  _id: incident._id,
+                                  item: `Incident: ${incident.name}`,
+                                }}
+                              />
                             </Dialog>
                           </DropdownMenuContent>
                         </DropdownMenu>

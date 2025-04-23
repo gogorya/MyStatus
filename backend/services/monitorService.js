@@ -1,4 +1,3 @@
-const organizationService = require("./organizationService.js");
 const activeMonitorService = require("./activeMonitorService.js");
 
 const Monitor = require("../models/Monitor.js");
@@ -18,13 +17,6 @@ const getMonitors = async (orgId) => {
 
 const createMonitor = async (data) => {
   try {
-    const organizationExists = await organizationService.organizationExists(
-      data.orgId
-    );
-    if (!organizationExists) {
-      await organizationService.createOrganization(data.orgId);
-    }
-
     const newMonitor = new Monitor(data);
     await newMonitor.save();
 

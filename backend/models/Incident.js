@@ -21,6 +21,7 @@ const incidentSchema = new mongoose.Schema({
     type: String,
     required: true,
     immutable: true,
+    index: true,
   },
   name: {
     type: String,
@@ -41,6 +42,8 @@ const incidentSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+incidentSchema.index({ monitor: 1, createdAt: 1 });
 
 incidentSchema.pre("save", function (next) {
   if (this.isModified("statusHistory") || this.isModified("name")) {

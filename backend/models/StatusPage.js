@@ -5,6 +5,7 @@ const statusPageSchema = new mongoose.Schema({
     type: String,
     required: true,
     immutable: true,
+    index: true,
   },
   name: {
     type: String,

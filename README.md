@@ -13,8 +13,7 @@ MyStatus is a web application for monitoring the status of various web services.
 
 ## Technologies Used
 
-- Next.js
-- React
+- Next.js/React
 - Tailwind CSS
 - MongoDB
 - Clerk for authentication
@@ -59,7 +58,7 @@ MyStatus is a web application for monitoring the status of various web services.
 
 - Backend
   ```env
-  MONGODB_URI=mongodb://localhost:27017/yourdbname
+  MONGODB_URI=mongodb://localhost:27017/your-db-name
   CLERK_PUBLISHABLE_KEY=your-clerk-public-key
   CLERK_SECRET_KEY=your-clerk-api-key
   ```
@@ -84,7 +83,8 @@ MyStatus is a web application for monitoring the status of various web services.
 
 ## Project Structure
 
-- `app/`: Contains the Next.js pages and components
+- frontend: Contains the frontend pages, components, and functions
+- `app/`: Contains the Next.js pages
 - `components/`: Contains the UI components
 - `lib/`: Contains the API endpoints and utility functions
 - backend: Contains the backend services, controllers, and routes
@@ -115,10 +115,8 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 - Upgrade Next.js version and check for breaking changes
 - Socket connection for live updates
-- Checking for improvements in code architecture and database design
-- Finding and improving edge cases, response formatting, and other minor bugs
+- Finding and improving edge cases and other minor bugs
 - Improve UI & responsiveness on mobile devices
-- Figure out proper indexing for database fields
 
 ## Known Issues
 
