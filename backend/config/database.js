@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Agenda = require("agenda");
 
 const connectDB = async () => {
   try {
@@ -10,4 +11,11 @@ const connectDB = async () => {
   }
 };
 
-module.exports = connectDB;
+const initializeAgenda = () => {
+  const agenda = new Agenda({
+    db: { address: process.env.MONGODB_URI },
+  });
+  return agenda;
+};
+
+module.exports = { connectDB, initializeAgenda };

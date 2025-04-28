@@ -74,13 +74,13 @@ export default function Page() {
           const mp = new Map();
           monitor.data.map((it) => {
             const date = new Date(it.date);
-            mp.set(`${date.getDate()}/${date.getMonth()}`, it);
+            mp.set(`${date.getUTCDate()}/${date.getUTCMonth()}`, it);
           });
 
           const updatedMonitorData = Array.from({ length: 30 }).map(
             (_, index) => {
               const date = new Date(Date.now() - index * (24 * 60 * 60 * 1000));
-              const key = `${date.getDate()}/${date.getMonth()}`;
+              const key = `${date.getUTCDate()}/${date.getUTCMonth()}`;
 
               return mp.has(key) ? mp.get(key) : null;
             }

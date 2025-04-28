@@ -122,7 +122,6 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 - Dropdown menu for Editing remains open
 - Hover card does not work on mobile
-- Old data remains persistent on Monitor link change
 - Theme toggle is not working on Firefox mobile
 
 <!-- ### Explanation:

@@ -1,4 +1,5 @@
 const ActiveMonitor = require("../models/ActiveMonitor");
+const ActiveMonitorData = require("../models/ActiveMonitorData");
 
 const activeMonitorExists = async (id) => {
   try {
@@ -29,7 +30,12 @@ const deleteActiveMonitor = async (data) => {
     if (activeMonitorToDelete.orgId.toString() !== data.orgId.toString()) {
       throw new Error("Unauthorized");
     }
+
     await ActiveMonitor.findByIdAndDelete(activeMonitorToDelete._id);
+    await ActiveMonitorData.deleteOne({
+      monitor: activeMonitorToDelete.monitorId,
+    });
+
     return activeMonitorToDelete;
   } catch (error) {
     throw new Error("Failed to delete active monitor: " + error.message);

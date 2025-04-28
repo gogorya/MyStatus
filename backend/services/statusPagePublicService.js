@@ -1,5 +1,3 @@
-const incidentService = require("./incidentService.js");
-
 const StatusPage = require("../models/StatusPage.js");
 const Monitor = require("../models/Monitor.js");
 const ActiveMonitorData = require("../models/ActiveMonitorData.js");
@@ -23,13 +21,16 @@ const getStatusPagePublic = async (slug) => {
       },
       { data: { $slice: -30 } }
     ).populate("monitor");
+    monitorsData.sort((a, b) =>
+      a.monitor._id.getTimestamp() < b.monitor._id.getTimestamp() ? -1 : 1
+    );
 
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const incidentsData = await Incident.find({
       monitor: monitors,
       createdAt: { $gte: thirtyDaysAgo },
     }).populate("monitor");
-    incidentsData.reverse();
+    incidentsData.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 
     return { monitorsData, incidentsData };
   } catch (error) {
