@@ -19,7 +19,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "helmet": "^8.1.0",
-    "mongoose": "^8.9.3"
+    "mongoose": "^8.9.3",
+    "svix": "^1.64.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

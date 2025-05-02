@@ -25,7 +25,7 @@ const createStatusPage = async (req, res) => {
     });
   } catch (error) {
     if (error.message === "Slug already exists") {
-      res.status(201).json({
+      res.status(409).json({
         message: "The slug already exists, please try with another name",
         error: error.message,
       });
@@ -62,12 +62,8 @@ const deleteStatusPage = async (req, res) => {
     const { orgId } = req.auth;
     const _id = req.params._id;
     const data = { orgId, _id };
-    const deletedStatusPage = await statusPageService.deleteStatusPage(data);
-    res.status(201).json({
-      data: {
-        statusPage: deletedStatusPage,
-      },
-    });
+    await statusPageService.deleteStatusPage(data);
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({
       message: "Unable to delete status page",

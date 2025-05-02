@@ -1,0 +1,559 @@
+swagger: "2.0"
+info:
+  title: MyStatus API
+  description: API configuration for the MyStatus app.
+  version: 1.0.0
+host: DNS_NAME_OF_DEPLOYED_API
+schemes:
+  - https
+securityDefinitions:
+  api_key:
+    type: apiKey
+    in: header
+    name: x-api-key
+security:
+  - api_key: []
+x-google-backend:
+  address: GOOGLE_BACKEND_URL
+paths:
+  /ping:
+    get:
+      summary: Ping endpoint.
+      description: Ping route to keep cloud container active.
+      operationId: ping
+      responses:
+        200:
+          description: Success
+  /public/status-pages-public/{slug}:
+    get:
+      summary: Get Public Status Page data.
+      description: Route to retrieve data for Public Status Pages.
+      operationId: statusPagesPublic
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  statusPagePublic:
+                    type: object
+                    properties:
+                      monitorsData:
+                        type: array
+                        items:
+                          $ref: "#/definitions/ActiveMonitorData"
+                      incidentsData:
+                        type: array
+                        items:
+                          $ref: "#/definitions/Incident"
+        404:
+          description: Page not found
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /webhooks/delete-organization:
+    post:
+      summary: Delete Organization webhook.
+      description: Webhook endpoint for organization.deleted events from clerk.
+      operationId: deleteOrganization
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  deleted:
+                    type: boolean
+                  id:
+                    type: string
+                  object:
+                    type: string
+              event_attributes:
+                type: object
+                properties:
+                  http_request:
+                    type: object
+                    properties:
+                      client_ip:
+                        type: string
+                      user_agent:
+                        type: string
+              object:
+                type: string
+              timestamp:
+                type: integer
+              type:
+                type: string
+      responses:
+        204:
+          description: Success
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  # /api endpoints are organization-specific.
+  /api/monitors:
+    get:
+      tags:
+        - Monitor
+      summary: Get all Monitors.
+      description: Returns an array of Monitors.
+      operationId: getMonitors
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  monitors:
+                    type: array
+                    items:
+                      $ref: "#/definitions/Monitor"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Monitor
+      summary: Create Monitor.
+      description: Returns a Monitor.
+      operationId: createMonitor
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  link:
+                    type: string
+                  active:
+                    type: boolean
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  monitor:
+                    $ref: "#/definitions/Monitor"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /api/monitors/{id}:
+    patch:
+      tags:
+        - Monitor
+      summary: Update Monitor.
+      description: Returns a Monitor.
+      operationId: updateMonitor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  link:
+                    type: string
+                  active:
+                    type: boolean
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  monitor:
+                    $ref: "#/definitions/Monitor"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Monitor
+      summary: Delete Monitor.
+      description: Deletes a Monitor.
+      operationId: deleteMonitor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        204:
+          description: Success
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /api/status-pages:
+    get:
+      tags:
+        - StatusPage
+      summary: Get all Status Pages.
+      description: Returns an array of Status Pages.
+      operationId: getStatusPages
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  statusPages:
+                    type: array
+                    items:
+                      $ref: "#/definitions/StatusPage"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - StatusPage
+      summary: Create Status Page.
+      description: Returns a Status Page.
+      operationId: createStatusPage
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  slug:
+                    type: string
+                  active:
+                    type: boolean
+                  monitors:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  statusPage:
+                    $ref: "#/definitions/StatusPage"
+        409:
+          description: Slug already exists
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /api/status-pages/{id}:
+    patch:
+      tags:
+        - StatusPage
+      summary: Update Status Page.
+      description: Returns a Status Page.
+      operationId: updateStatusPage
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  active:
+                    type: boolean
+                  monitors:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  statusPage:
+                    $ref: "#/definitions/StatusPage"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - StatusPage
+      summary: Delete Status Page.
+      description: Deletes a Status Page.
+      operationId: deleteStatusPage
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        204:
+          description: Success
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /api/incidents:
+    get:
+      tags:
+        - Incident
+      summary: Get all Incidents.
+      description: Returns an array of Incidents.
+      operationId: getIncidents
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  incidents:
+                    type: array
+                    items:
+                      $ref: "#/definitions/Incident"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Incident
+      summary: Create Incident.
+      description: Returns an Incident.
+      operationId: createIncident
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  monitor:
+                    type: string
+                  status:
+                    type: string
+                  message:
+                    type: string
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  incident:
+                    $ref: "#/definitions/Incident"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /api/incidents/{id}:
+    patch:
+      tags:
+        - Incident
+      summary: Update Incident.
+      description: Returns an Incident.
+      operationId: updateIncident
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  status:
+                    type: string
+                  message:
+                    type: string
+      responses:
+        201:
+          description: Success
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  incident:
+                    $ref: "#/definitions/Incident"
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Incident
+      summary: Delete Incident.
+      description: Deletes an Incident.
+      operationId: deleteIncident
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+      responses:
+        204:
+          description: Success
+        500:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Monitor:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      link:
+        type: string
+      active:
+        type: boolean
+  StatusPage:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      monitors:
+        type: array
+        items:
+          $ref: "#/definitions/Monitor"
+      active:
+        type: boolean
+  Incident:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      monitor:
+        $ref: "#/definitions/Monitor"
+      statusHistory:
+        type: array
+        items:
+          type: object
+          properties:
+            _id:
+              type: string
+            status:
+              type: string
+            message:
+              type: string
+            createdAt:
+              type: string
+      createdAt:
+        type: string
+  ActiveMonitorData:
+    type: object
+    properties:
+      _id:
+        type: string
+      monitor:
+        $ref: "#/definitions/Monitor"
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            _id:
+              type: string
+            date:
+              type: string
+            success:
+              type: integer
+            fail:
+              type: integer
+      lastThreeRequests:
+        type: array
+        items:
+          type: boolean
+        minItems: 3
+        maxItems: 3
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+      error:
+        type: string

@@ -130,7 +130,7 @@ export default function Page() {
       active: statusPage.active,
       monitors: statusPage.monitors
         .filter((monitor) => monitor.selected)
-        .map(({ name, link, active, selected, ...rest }) => rest),
+        .map((monitor) => monitor._id),
     };
     if (statusPage._id != null) {
       delete data.name;

@@ -55,12 +55,8 @@ const deleteMonitor = async (req, res) => {
     const { orgId } = req.auth;
     const _id = req.params._id;
     const data = { orgId, _id };
-    const deletedMonitor = await monitorService.deleteMonitor(data);
-    res.status(201).json({
-      data: {
-        monitor: deletedMonitor,
-      },
-    });
+    await monitorService.deleteMonitor(data);
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({
       message: "Unable to delete monitor",

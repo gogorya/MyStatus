@@ -5,6 +5,7 @@ const activeMonitorSchema = new mongoose.Schema({
     type: String,
     required: true,
     immutable: true,
+    index: true,
   },
   monitorId: {
     type: mongoose.Schema.Types.ObjectId,

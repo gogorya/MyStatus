@@ -9,7 +9,7 @@ const getStatusPagePublic = async (req, res) => {
     res.status(200).json({ data: { statusPagePublic } });
   } catch (error) {
     if (error.message === "Status page not found") {
-      res.status(200).json({
+      res.status(404).json({
         message: "This page does not exist",
         error: error.message,
       });
