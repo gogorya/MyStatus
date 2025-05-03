@@ -6,6 +6,7 @@ const host = process.env.API_HOST || "http://localhost:8080";
 
 export const fetchPublicAction = async (url, options) => {
   try {
+    options.headers["x-api-key"] = process.env.API_KEY || null;
     const res = await fetch(host + url, options);
 
     if (!res.ok && res.status !== 404) {
