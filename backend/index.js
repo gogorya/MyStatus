@@ -16,6 +16,12 @@ require("dotenv").config();
 const app = express();
 
 app.use(express.json());
+// Temp middleware to check req
+app.use((req, res, next) => {
+  console.log("Headers:", Object.keys(req.headers));
+  console.log("Auth Header:", req.headers.authorization);
+  next();
+});
 app.use(cors({ origin: process.env.ORIGIN || "http://localhost:3000" }));
 app.use(helmet());
 app.use(routes);
