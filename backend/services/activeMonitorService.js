@@ -1,5 +1,15 @@
+const activeMonitorDataService = require("./activeMonitorDataService");
+
 const ActiveMonitor = require("../models/ActiveMonitor");
-const ActiveMonitorData = require("../models/ActiveMonitorData");
+
+const getActiveMonitors = async () => {
+  try {
+    const activeMonitors = await ActiveMonitor.find();
+    return activeMonitors;
+  } catch (error) {
+    throw new Error("Failed to get active monitors: " + error.message);
+  }
+};
 
 const activeMonitorExists = async (id) => {
   try {
@@ -32,7 +42,7 @@ const deleteActiveMonitor = async (data) => {
     }
 
     await ActiveMonitor.findByIdAndDelete(activeMonitorToDelete._id);
-    await ActiveMonitorData.deleteOne({
+    await activeMonitorDataService.deleteActiveMonitorData({
       monitor: activeMonitorToDelete.monitorId,
     });
 
@@ -43,6 +53,7 @@ const deleteActiveMonitor = async (data) => {
 };
 
 module.exports = {
+  getActiveMonitors,
   activeMonitorExists,
   createActiveMonitor,
   deleteActiveMonitor,

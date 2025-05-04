@@ -74,9 +74,22 @@ const deleteStatusPage = async (data) => {
   }
 };
 
+const removeMonitors = async (data) => {
+  try {
+    const updateResult = await StatusPage.updateMany(
+      { orgId: data.orgId },
+      { $pull: { monitors: data.monitor } }
+    );
+    return updateResult;
+  } catch (error) {
+    throw new Error("Failed to remove monitors: " + error.message);
+  }
+};
+
 module.exports = {
   getStatusPages,
   createStatusPage,
   updateStatusPage,
   deleteStatusPage,
+  removeMonitors,
 };

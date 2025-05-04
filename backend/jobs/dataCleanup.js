@@ -1,20 +1,11 @@
-const ActiveMonitorData = require("../models/ActiveMonitorData");
+const activeMonitorDataService = require("../services/activeMonitorDataService");
 
 module.exports = (agenda) => {
   agenda.define("dataCleanup", async () => {
-    const updatePipeline = [
-      {
-        $set: {
-          data: { $slice: ["$data", -45] },
-        },
-      },
-    ];
-
-    await ActiveMonitorData.updateMany(
-      {
-        "data.45": { $exists: true },
-      },
-      updatePipeline
-    );
+    try {
+      await activeMonitorDataService.cleanOldData();
+    } catch (error) {
+      throw new Error("Job dataCleanup failed: " + error.message);
+    }
   });
 };

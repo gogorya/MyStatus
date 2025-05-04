@@ -1,8 +1,8 @@
 const activeMonitorService = require("./activeMonitorService.js");
+const incidentService = require("./incidentService");
+const statusPageService = require("./statusPageService");
 
 const Monitor = require("../models/Monitor.js");
-const StatusPage = require("../models/StatusPage.js");
-const Incident = require("../models/Incident.js");
 
 const getMonitors = async (orgId) => {
   try {
@@ -106,10 +106,11 @@ const deleteMonitor = async (data) => {
       throw new Error("Unauthorized");
     }
 
-    await StatusPage.updateMany(
-      { orgId: data.orgId },
-      { $pull: { monitors: data._id } }
-    );
+    // Remove from StatusPages
+    await statusPageService.removeMonitors({
+      orgId: monitorToDelete.orgId,
+      monitor: monitorToDelete._id,
+    });
     await Monitor.findByIdAndDelete(data._id);
 
     // If in ActiveMonitor, delete ActiveMonitor
@@ -127,12 +128,8 @@ const deleteMonitor = async (data) => {
       }
     }
 
-    // If incidents, delete incidents
-    try {
-      await Incident.deleteMany({ monitor: monitorToDelete._id });
-    } catch (error) {
-      throw new Error("Failed to delete incidents: " + error.message);
-    }
+    // If Incidents exist, delete Incidents
+    await incidentService.deleteIncidents({ monitor: monitorToDelete._id });
 
     return monitorToDelete;
   } catch (error) {

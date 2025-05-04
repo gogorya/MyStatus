@@ -1,21 +1,17 @@
 const axios = require("axios");
 const async = require("async");
 
-const ActiveMonitor = require("../models/ActiveMonitor");
-const ActiveMonitorData = require("../models/ActiveMonitorData");
+const activeMonitorService = require("../services/activeMonitorService");
+const activeMonitorDataService = require("../services/activeMonitorDataService");
 
 const savePingData = async (monitorId, orgId, success) => {
   try {
-    let monitorData = await ActiveMonitorData.findOne({ monitor: monitorId });
-    const currentDate = new Date().toISOString().split("T")[0];
-    if (!monitorData) {
-      monitorData = new ActiveMonitorData({
-        monitor: monitorId,
-        orgId: orgId,
-        data: [],
-      });
-    }
+    const monitorData = await activeMonitorDataService.getActiveMonitorData({
+      monitor: monitorId,
+      orgId: orgId,
+    });
 
+    const currentDate = new Date().toISOString().split("T")[0];
     const lastRecord = monitorData.data[monitorData.data.length - 1];
 
     if (
@@ -48,7 +44,7 @@ const savePingData = async (monitorId, orgId, success) => {
 
 module.exports = (agenda) => {
   agenda.define("checkStatus", async () => {
-    const activeMonitors = await ActiveMonitor.find();
+    const activeMonitors = await activeMonitorService.getActiveMonitors();
 
     const monitorTasks = activeMonitors.map((monitor) => async () => {
       try {

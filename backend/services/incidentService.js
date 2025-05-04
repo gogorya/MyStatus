@@ -79,9 +79,21 @@ const deleteIncident = async (data) => {
   }
 };
 
+const deleteIncidents = async (data) => {
+  try {
+    const deleteResult = await Incident.deleteMany({
+      monitor: data.monitor,
+    });
+    return deleteResult;
+  } catch (error) {
+    throw new Error("Failed to delete incidents: " + error.message);
+  }
+};
+
 module.exports = {
   getIncidents,
   createIncident,
   updateIncident,
   deleteIncident,
+  deleteIncidents,
 };
