@@ -24,7 +24,7 @@ export const fetchApiAction = async (url, options) => {
     const { getToken } = await auth();
     const token = await getToken();
 
-    options.headers.Authorization = `Bearer ${token}`;
+    options.headers["Authorization"] = `Bearer ${token}`;
     options.headers["x-api-key"] = process.env.API_KEY || null;
     const res = await fetch(host + url, options);
 

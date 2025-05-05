@@ -16,4 +16,16 @@
   .header {
     @apply min-h-16 pl-6 pr-6 pt-2 pb-2;
   }
+  .navbar-item {
+    @apply h-9
+    flex
+    items-center
+    justify-center
+    px-4
+    py-2
+    rounded-md
+    hover:bg-gray-100
+    dark:hover:bg-gray-800
+    transition-colors;
+  }
 }

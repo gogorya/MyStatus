@@ -3,12 +3,6 @@ const monitorService = require("../services/monitorService");
 const getMonitors = async (req, res) => {
   try {
     const { orgId } = req.auth;
-
-    const { orgSlug } = req.auth;
-    console.log("Headers:", Object.keys(req.headers));
-    console.log("Auth Header:", req.headers.authorization);
-    console.log("Org slug:", orgSlug);
-
     const monitors = await monitorService.getMonitors(orgId);
     res.status(200).json({ data: { monitors } });
   } catch (error) {

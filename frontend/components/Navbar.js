@@ -1,13 +1,6 @@
 "use client";
 
 // UI components
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
 import { Label } from "@/components/ui/label";
 import { Card } from "./ui/card";
 
@@ -45,55 +38,37 @@ export default function Navbar() {
 
         {onDashboard ? (
           <>
-            <div className="flex-1 order-3 min-[667px]:order-2">
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <SignedIn>
-                    <NavigationMenuItem>
-                      <Link
-                        href={`/dashboard/${orgSlug}/monitors`}
-                        legacyBehavior
-                        passHref
-                      >
-                        <NavigationMenuLink
-                          className={navigationMenuTriggerStyle()}
-                        >
-                          Monitors
-                        </NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                      <Link
-                        href={`/dashboard/${orgSlug}/status-pages`}
-                        legacyBehavior
-                        passHref
-                      >
-                        <NavigationMenuLink
-                          className={navigationMenuTriggerStyle()}
-                        >
-                          Status Pages
-                        </NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem>
-                    <NavigationMenuItem>
-                      <Link
-                        href={`/dashboard/${orgSlug}/incidents`}
-                        legacyBehavior
-                        passHref
-                      >
-                        <NavigationMenuLink
-                          className={navigationMenuTriggerStyle()}
-                        >
-                          Incidents
-                        </NavigationMenuLink>
-                      </Link>
-                    </NavigationMenuItem>
-                  </SignedIn>
-                </NavigationMenuList>
-              </NavigationMenu>
+            <div className="flex-1 order-3 min-[675px]:order-2">
+              <SignedIn>
+                <div className="flex justify-center space-x-2">
+                  <Link
+                    className="navbar-item"
+                    href={`/dashboard/${orgSlug}/monitors`}
+                    passHref
+                  >
+                    <Label className="cursor-pointer">Monitors</Label>
+                  </Link>
+                  <Link
+                    className="navbar-item"
+                    href={`/dashboard/${orgSlug}/status-pages`}
+                    passHref
+                  >
+                    <Label className="cursor-pointer whitespace-nowrap">
+                      Status Pages
+                    </Label>
+                  </Link>
+                  <Link
+                    className="navbar-item"
+                    href={`/dashboard/${orgSlug}/incidents`}
+                    passHref
+                  >
+                    <Label className="cursor-pointer">Incidents</Label>
+                  </Link>
+                </div>
+              </SignedIn>
             </div>
 
-            <div className="w-[152px] order-2 min-[667px]:order-3">
+            <div className="w-[152px] order-2 min-[675px]:order-3">
               <SignedIn>
                 <OrganizationSwitcher />
                 <UserButton />
