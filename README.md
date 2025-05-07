@@ -1,6 +1,6 @@
 # MyStatus
 
-MyStatus is a web application for monitoring the status of various web services. It provides a public status page, a Dashboard to manage your services and status pages.
+MyStatus is a web application for monitoring the status of various web services. It provides the ability to create public status pages and a Dashboard to manage your services and status pages.
 
 ## Features
 
@@ -56,11 +56,12 @@ MyStatus is a web application for monitoring the status of various web services.
   API_HOST=your-api-host
   ```
 
-- Backend
+- Backend (Svix key only needed if setting up clerk Webhooks)
   ```env
   MONGODB_URI=mongodb://localhost:27017/your-db-name
   CLERK_PUBLISHABLE_KEY=your-clerk-public-key
   CLERK_SECRET_KEY=your-clerk-api-key
+  SVIX_WEBHOOK_SECRET=your-svix-webhook-key
   ```
 
 4. Run the development server:
@@ -89,8 +90,8 @@ MyStatus is a web application for monitoring the status of various web services.
 - `lib/`: Contains the API endpoints and utility functions
 - backend: Contains the backend services, controllers, and routes
 - `models/`: Contains the Mongoose models
-- `jobs/`: Contains the job scheduling logic using Agenda
-- `services/`: Contains business logic and functions that handle data processing.
+- `jobs/`: Contains the jobs and scheduling logic using Agenda
+- `services/`: Contains business logic and functions that handle data processing
 
 ## Scripts
 
@@ -113,16 +114,21 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## To do
 
-- Upgrade Next.js version and check for breaking changes
+- Automatic Incident creation when a service is down
 - Socket connection for live updates
-- Finding and improving edge cases and other minor bugs
+- Display UTC time on public status page
+- Send all active Incidents on public status page and separate them
+- Email subscription to provide updates on services
 - Improve UI & responsiveness on mobile devices
+- Finding and improving edge cases and other minor bugs
 
 ## Known Issues
 
 - Dropdown menu for Editing remains open
 - Hover card does not work on mobile
 - Theme toggle is not working on Firefox mobile
+- Dashboard doesn't load on signing in when using 'npm run dev'
+- CORS header is not appearing on the frontend
 
 <!-- ### Explanation:
 

@@ -7,7 +7,7 @@ const deleteOrganization = async (req, res) => {
     const payload = req.body;
     const headers = req.headers;
 
-    const wh = new Webhook(process.env.SVIX_SECRET);
+    const wh = new Webhook(process.env.SVIX_WEBHOOK_SECRET);
     let msg;
     try {
       msg = wh.verify(JSON.stringify(payload), headers);

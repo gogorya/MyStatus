@@ -15,6 +15,46 @@ security:
   - api_key: []
 x-google-backend:
   address: GOOGLE_BACKEND_URL
+x-google-management:
+  metrics:
+    - name: "get-requests"
+      displayName: "GET requests"
+      valueType: INT64
+      metricKind: DELTA
+    - name: "post-requests"
+      displayName: "POST requests"
+      valueType: INT64
+      metricKind: DELTA
+    - name: "patch-requests"
+      displayName: "PATCH requests"
+      valueType: INT64
+      metricKind: DELTA
+    - name: "delete-requests"
+      displayName: "DELETE requests"
+      valueType: INT64
+      metricKind: DELTA
+  quota:
+    limits:
+      - name: "get-limit"
+        metric: "get-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 20
+      - name: "post-limit"
+        metric: "post-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10
+      - name: "patch-limit"
+        metric: "patch-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10
+      - name: "delete-limit"
+        metric: "delete-requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 10
 paths:
   /ping:
     get:
@@ -24,6 +64,9 @@ paths:
       responses:
         200:
           description: Success
+      x-google-quota:
+        metricCosts:
+          "get-requests": 1
   /public/status-pages-public/{slug}:
     get:
       summary: Get Public Status Page data.
@@ -62,6 +105,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "get-requests": 1
   /webhooks/delete-organization:
     post:
       summary: Delete Organization webhook.
@@ -105,6 +151,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "post-requests": 1
   # /api endpoints are organization-specific.
   /api/monitors:
     get:
@@ -130,6 +179,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "get-requests": 1
     post:
       tags:
         - Monitor
@@ -166,6 +218,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "post-requests": 1
   /api/monitors/{id}:
     patch:
       tags:
@@ -207,6 +262,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "patch-requests": 1
     delete:
       tags:
         - Monitor
@@ -225,6 +283,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "delete-requests": 1
   /api/status-pages:
     get:
       tags:
@@ -249,6 +310,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "get-requests": 1
     post:
       tags:
         - StatusPage
@@ -293,6 +357,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "post-requests": 1
   /api/status-pages/{id}:
     patch:
       tags:
@@ -334,6 +401,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "patch-requests": 1
     delete:
       tags:
         - StatusPage
@@ -352,6 +422,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "delete-requests": 1
   /api/incidents:
     get:
       tags:
@@ -376,6 +449,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "get-requests": 1
     post:
       tags:
         - Incident
@@ -414,6 +490,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "post-requests": 1
   /api/incidents/{id}:
     patch:
       tags:
@@ -455,6 +534,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "patch-requests": 1
     delete:
       tags:
         - Incident
@@ -473,6 +555,9 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+      x-google-quota:
+        metricCosts:
+          "delete-requests": 1
 definitions:
   Monitor:
     type: object
