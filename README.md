@@ -6,6 +6,7 @@ MyStatus is a web application for monitoring the status of various web services.
 
 - Public status page
 - Multi tenant design
+- Live service monitoring
 - Clerk Authentication
 - Dashboard to manage services
 - Dark mode support
@@ -17,9 +18,10 @@ MyStatus is a web application for monitoring the status of various web services.
 - Tailwind CSS
 - MongoDB
 - Clerk for authentication
-- Agenda for job scheduling
-- Axios for HTTP requests
+- agenda for job scheduling
+- axios for HTTP requests
 - cors, helmet
+- shadcn/ui
 
 ## Getting Started
 
@@ -72,7 +74,7 @@ MyStatus is a web application for monitoring the status of various web services.
   npm run dev
   ```
 
-  Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  Running on [http://localhost:3000](http://localhost:3000).
 
 - Backend
 
@@ -80,7 +82,7 @@ MyStatus is a web application for monitoring the status of various web services.
   npm run dev
   ```
 
-  Running on [http://localhost:8080](http://localhost:8080)
+  Running on [http://localhost:8080](http://localhost:8080).
 
 ## Project Structure
 
@@ -114,21 +116,21 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## To do
 
-- Automatic Incident creation when a service is down
-- Socket connection for live updates
-- Display UTC time on public status page
-- Send all active Incidents on public status page and separate them
-- Email subscription to provide updates on services
-- Improve UI & responsiveness on mobile devices
-- Finding and improving edge cases and other minor bugs
+- Automatic Incident creation when a service is down.
+- Socket connection for live updates.
+- Display UTC time on public status page.
+- Send all active Incidents on public status page and separate them.
+- Email subscription to provide updates on services.
+- Improve UI & responsiveness on mobile devices.
+- Finding and improving edge cases and other minor bugs.
 
 ## Known Issues
 
-- Dropdown menu for Editing remains open
-- Hover card does not work on mobile
-- Theme toggle is not working on Firefox mobile
-- Dashboard doesn't load on signing in when using 'npm run dev'
-- CORS header is not appearing on the frontend
+- Dropdown menu for Editing remains open.
+- Hover card does not work on mobile.
+- Theme toggle is not working on Firefox mobile.
+- Dashboard doesn't load on signing in when using 'npm run dev'.
+- CORS header is not appearing on the frontend.
 
 <!-- ### Explanation:
 
